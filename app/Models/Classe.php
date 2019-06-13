@@ -39,4 +39,8 @@ class Classe extends Model
      */
     protected $fillable = ['nomClasse', 'nature', 'codeN', 'code'];
 
+    public function sousclasse()
+    {
+        return $this->hasMany(SousClasse::class);
+    }
 }

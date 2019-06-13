@@ -8,13 +8,13 @@ padding:0;
 font-size:11px;
 margin:0 auto auto auto;
 color:#111111;
-width:1275px;
+width:100%;
 }
 
 
 /*--------------- les du corps du site ------------------*/
 #wrap{
-width:1260px;
+width:100%;
 height: auto;
 margin:auto;
 background-color:#00F;
@@ -25,7 +25,7 @@ border:#000;
 
 .header {  
 height:215px;
-width:1275px;
+width:100%;
 margin:0;
 /*-- background:url(../images/header.png) repeat-x bottom; --*/
 background:url(../images/header.gif) repeat-x bottom;
@@ -34,7 +34,7 @@ border:#000;
 
 .title{
 	color: #00008B;
-	width: 1275px;
+	width: 100%;
 	font-size: 17px;
 	font-family: "Times New Roman", Times, serif;
 	background-image: url(../images/banniere.png);
@@ -43,9 +43,9 @@ border:#000;
 
 #nav {			
 	float:none;
-    width:1000px;
+	width: 90%;
     height:35px;
-    margin: 130px 10px 0 150px;
+    margin: 10% 5% 0;
     padding:0;
 	border-radius: 2em;
 	-webkit-border-radius: 2em;

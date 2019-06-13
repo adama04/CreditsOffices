@@ -39,4 +39,13 @@ class SousClasse extends Model
      */
     protected $fillable = ['idClasse', 'nomSousclasse', 'codeDsc', 'name'];
 
+    public function classe()
+    {
+        return $this->belongsTo(Classe::class);
+    }
+
+    public function rubrique()
+    {
+        return $this->hasMany(Rubrique::class);
+    }
 }
