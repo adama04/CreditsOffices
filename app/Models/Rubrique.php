@@ -41,4 +41,11 @@ class Rubrique extends Model
      */
     protected $fillable = ['idSousclasse', 'code1', 'code2', 'codeD', 'nomRubrique', 'nomRubriqueOh'];
 
+    public function sousclasse(){
+        return $this->belongsTo(SousClasse::class);
+    }
+    public function entreprises()
+    {
+        return $this->belongsToMany(Entreprises::class);
+    }
 }

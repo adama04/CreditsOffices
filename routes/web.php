@@ -16,3 +16,4 @@ Route::get('/', function () {
 });
 
 Route::get('/bilan', 'BilanController@index');
+Route::get('/bilan', 'BilanController@index');

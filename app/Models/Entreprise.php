@@ -59,4 +59,8 @@ class Entreprise extends Model
      */
     protected $fillable = ['numRegistre', 'codePays', 'codeRegion', 'type', 'numEnregistre', 'nomEntreprise', 'Adresse', 'Tel1', 'Fax', 'persressouMail', 'webSite', 'boitePostal', 'dateCreation', 'moisCreation', 'jourCreation', 'Categorie', 'idLocalite', 'Pays', 'Sigle', 'Logo', 'geoLocali', 'tailleEntreprise', 'statutEtreprise', 'dateFin'];
 
+    public function rubriques()
+    {
+        return $this->belongsToMany(Rubrique::class);
+    }
 }

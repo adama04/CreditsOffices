@@ -94,6 +94,7 @@ class ComposerStaticInit0a4ae66310e5fdc6dfbd20ca009751a3
         array (
             'League\\Flysystem\\' => 17,
             'Laravel\\Tinker\\' => 15,
+            'Laracademy\\Generators\\' => 22,
         ),
         'K' => 
         array (
@@ -299,6 +300,10 @@ class ComposerStaticInit0a4ae66310e5fdc6dfbd20ca009751a3
         array (
             0 => __DIR__ . '/..' . '/laravel/tinker/src',
         ),
+        'Laracademy\\Generators\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/laracademy/generators/src',
+        ),
         'Krlove\\EloquentModelGenerator\\' => 
         array (
             0 => __DIR__ . '/..' . '/krlove/eloquent-model-generator/src',
@@ -416,6 +421,7 @@ class ComposerStaticInit0a4ae66310e5fdc6dfbd20ca009751a3
         'App\\Http\\Controllers\\Auth\\VerificationController' => __DIR__ . '/../..' . '/app/Http/Controllers/Auth/VerificationController.php',
         'App\\Http\\Controllers\\BilanController' => __DIR__ . '/../..' . '/app/Http/Controllers/BilanController.php',
         'App\\Http\\Controllers\\Controller' => __DIR__ . '/../..' . '/app/Http/Controllers/Controller.php',
+        'App\\Http\\Controllers\\EntrepriseController' => __DIR__ . '/../..' . '/app/Http/Controllers/EntrepriseController.php',
         'App\\Http\\Kernel' => __DIR__ . '/../..' . '/app/Http/Kernel.php',
         'App\\Http\\Middleware\\Authenticate' => __DIR__ . '/../..' . '/app/Http/Middleware/Authenticate.php',
         'App\\Http\\Middleware\\CheckForMaintenanceMode' => __DIR__ . '/../..' . '/app/Http/Middleware/CheckForMaintenanceMode.php',
@@ -2272,6 +2278,8 @@ class ComposerStaticInit0a4ae66310e5fdc6dfbd20ca009751a3
         'Krlove\\EloquentModelGenerator\\Processor\\TableNameProcessor' => __DIR__ . '/..' . '/krlove/eloquent-model-generator/src/Processor/TableNameProcessor.php',
         'Krlove\\EloquentModelGenerator\\Provider\\GeneratorServiceProvider' => __DIR__ . '/..' . '/krlove/eloquent-model-generator/src/Provider/GeneratorServiceProvider.php',
         'Krlove\\EloquentModelGenerator\\TypeRegistry' => __DIR__ . '/..' . '/krlove/eloquent-model-generator/src/TypeRegistry.php',
+        'Laracademy\\Generators\\Commands\\ModelFromTableCommand' => __DIR__ . '/..' . '/laracademy/generators/src/Commands/ModelFromTableCommand.php',
+        'Laracademy\\Generators\\GeneratorsServiceProvider' => __DIR__ . '/..' . '/laracademy/generators/src/GeneratorsServiceProvider.php',
         'Laravel\\Tinker\\ClassAliasAutoloader' => __DIR__ . '/..' . '/laravel/tinker/src/ClassAliasAutoloader.php',
         'Laravel\\Tinker\\Console\\TinkerCommand' => __DIR__ . '/..' . '/laravel/tinker/src/Console/TinkerCommand.php',
         'Laravel\\Tinker\\TinkerCaster' => __DIR__ . '/..' . '/laravel/tinker/src/TinkerCaster.php',

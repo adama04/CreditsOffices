@@ -24,9 +24,8 @@ border:#000;
 /*--------------- la tete du site ------------------*/
 
 .header {  
-height:215px;
+height:32%;
 width:100%;
-margin:0;
 /*-- background:url(../images/header.png) repeat-x bottom; --*/
 background:url(../images/header.gif) repeat-x bottom;
 border:#000;
@@ -45,7 +44,7 @@ border:#000;
 	float:none;
 	width: 90%;
     height:35px;
-    margin: 10% 5% 0;
+    margin: 8% 5% 0;
     padding:0;
 	border-radius: 2em;
 	-webkit-border-radius: 2em;
