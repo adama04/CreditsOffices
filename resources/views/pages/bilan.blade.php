@@ -15,14 +15,14 @@
                     <div class="col-md-4" style="font-size: medium">
                         <h3>Renseigne la Raison Sociale l'Entreprise :</h3>
                <select class="form-control m-bot15" name="idEntreprise">
-                  {{--  @if($entreprises->count() > 0)
+                   @if($entreprises->count() > 0)
                         @foreach($entreprises as $entreprise)
                             <option value="Renseigne la Raison Sociale l'Entreprise :"></option>
                             <option value="{{$entreprise->idEntreprise}}">{{$entreprise->nomEntreprise}}</option>
                         @endForeach
                     @else
                         No Record Found
-                    @endif--}}
+                    @endif
                 </select>
                     </div>
                     <div class="col-md-4" style="font-size: medium">
