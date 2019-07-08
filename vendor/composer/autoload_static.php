@@ -76,6 +76,7 @@ class ComposerStaticInit0a4ae66310e5fdc6dfbd20ca009751a3
             'Psr\\SimpleCache\\' => 16,
             'Psr\\Log\\' => 8,
             'Psr\\Container\\' => 14,
+            'Prophecy\\' => 9,
             'PhpParser\\' => 10,
         ),
         'O' => 
@@ -276,6 +277,10 @@ class ComposerStaticInit0a4ae66310e5fdc6dfbd20ca009751a3
         array (
             0 => __DIR__ . '/..' . '/psr/container/src',
         ),
+        'Prophecy\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/phpspec/prophecy/src/Prophecy',
+        ),
         'PhpParser\\' => 
         array (
             0 => __DIR__ . '/..' . '/nikic/php-parser/lib/PhpParser',
@@ -389,10 +394,6 @@ class ComposerStaticInit0a4ae66310e5fdc6dfbd20ca009751a3
     public static $prefixesPsr0 = array (
         'P' => 
         array (
-            'Prophecy\\' => 
-            array (
-                0 => __DIR__ . '/..' . '/phpspec/prophecy/src',
-            ),
             'PhpOption\\' => 
             array (
                 0 => __DIR__ . '/..' . '/phpoption/phpoption/src',
@@ -432,6 +433,7 @@ class ComposerStaticInit0a4ae66310e5fdc6dfbd20ca009751a3
         'App\\Http\\Middleware\\VerifyCsrfToken' => __DIR__ . '/../..' . '/app/Http/Middleware/VerifyCsrfToken.php',
         'App\\Models\\Classe' => __DIR__ . '/../..' . '/app/Models/Classe.php',
         'App\\Models\\Entreprise' => __DIR__ . '/../..' . '/app/Models/Entreprise.php',
+        'App\\Models\\Entreprises' => __DIR__ . '/../..' . '/app/Models/Entreprises.php',
         'App\\Models\\LigneBilan' => __DIR__ . '/../..' . '/app/Models/LigneBilan.php',
         'App\\Models\\Rubrique' => __DIR__ . '/../..' . '/app/Models/Rubrique.php',
         'App\\Models\\SousClasse' => __DIR__ . '/../..' . '/app/Models/SousClasse.php',

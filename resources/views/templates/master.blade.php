@@ -115,7 +115,7 @@
                     <a href="#"><span>D&eacute;pot des comptes</span></a>
                 </li>
                 <li>
-                    <a href="#"><span>Formulairee et models</span></a>
+                    <a href="#"><span>Formulaire et models</span></a>
                 </li>
                 <li>
                     <a href="#"><span>RCCM Internationaux</span></a>
@@ -185,8 +185,8 @@
                 <li><a href="#">CHAMBRE DES METIERS</a></li>
                 <li><a href="#">MINISTERES</a>
                     <ul>
-                        <li><a href="#">DE L'INDUSTRIE ET L'ARTISANAT</a></li>
-                        <li><a href="#">DE L'EMPLOIE</a></li>
+                        <li><a href="#">de l'industrie et de l'artisanat</a></li>
+                        <li><a href="#">de l'emploie</a></li>
                     </ul>
                 </li>
                 <li><a href="#">PATRONAT</a>
@@ -201,13 +201,13 @@
         <li><a href="#">Privil&eacute;ges et Nantissements</a>
             <ul>
                 <li><a href="#">
-                        INSCRIPTION DE PRIVIL&Egrave;GES ET NANTISSEMENTS</a></li>
+                        Inscription de privilèges et Nantissements </a></li>
                 <li><a href="#">
-                        REDIATION DE PRIVIL&Egrave;GES ET NANTISSEMENTS</a></li>
+                        Rediation de Privilèges et Nantissments</a></li>
                 <li><a href="#">
-                        INFORMATION SUR LES PRIVIL&Egrave;GES ET NANTISSEMENTS</a></li>
+                        Information sur les Privilèges et Nantissements </a></li>
                 <li><a href="#">
-                        TARIF DES PRIVIL&Egrave;GES ET NANTISSEMENTS</a></li>
+                        Tarif des Privilèges et Nantissements</a></li>
             </ul>
         </li>
 
