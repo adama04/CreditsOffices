@@ -15,5 +15,5 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/bilan', 'BilanController@index');
-Route::get('/bilan', 'BilanController@index');
+Route::get('/bilan/{pays?}', 'BilanController@index');
+Route::post('/bilan', 'BilanController@show');
