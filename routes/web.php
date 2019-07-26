@@ -10,10 +10,13 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Route::get('/', function () {
     return view('welcome');
 });
 
-Route::get('/bilan', 'BilanController@index');
-Route::get('/bilan', 'BilanController@index');
+Route::get('/bilan', 'BilanController@index')->name('billan');
+Route::get('autocomplete', 'BilanController@listeEntreprises')->name('autocomplete');
+
+
+
+

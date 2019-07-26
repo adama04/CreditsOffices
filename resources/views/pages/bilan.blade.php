@@ -2,17 +2,18 @@
 
 @section('nature', 'Bilan')
 
-
 @section('content')
-    <br/>
-    <br/>
-    <link rel="stylesheet" href="{{asset('css/app.css')}}">
+<br/>
+<br/>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
     <div class="container " id="container">
-        <ul class="nav nav-tabs">
-            <li class="active" style=" color: white; font-size: large">
+        <ul class="nav nav-pills">
+            <li class="active" style=" color: white; font-size: medium; font-family: 'Times New Roman'">
                 <a  href="#1" data-toggle="tab">Entreprise et son Secteur d'Activité</a>
             </li>
-            <li style=" color: white; font-size: large"><a href="#2" data-toggle="tab">Secteur d'Activité </a>
+            <li style=" color: white; font-size: medium; font-family: 'Times New Roman'"><a href="#2" data-toggle="tab">Secteur d'Activité </a>
             </li>
         </ul>
         <div class="card">
@@ -55,16 +56,17 @@
                 <div class="form-group row ">
                     <div class="col-md-4">
                         <h3>Renseigne la Raison Sociale l'Entreprise :</h3>
-                        <select class="form-control m-bot15" name="idEntreprise">
-                            @if($entreprises->count() > 0)
-                                @foreach($entreprises as $entreprise)
-                                    <option value="Renseigne la Raison Sociale l'Entreprise :"></option>
-                                    <option  style="font-size: larger; font-family: 'Times New Roman'" value="{{$entreprise->idEntreprise}}">{{$entreprise->nomEntreprise}}</option>
-                                @endForeach
-                            @else
-                                No Record Found
-                            @endif
-                        </select>
+                        <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="typeahead form-control" placeholder="Selectionner une entreprise">
+                    <script type="text/javascript">
+                        var path = "{{ route('autocomplete') }}";
+                        $('input.typeahead').typeahead({
+                            source:  function (query, process) {
+                                return $.get(path, { query: query }, function (data) {
+                                    return process(data);
+                                });
+                            }
+                        });
+                    </script>
                     </div>
                     <div class="col-md-4" style="font-size: medium">
                         <h3>Renseigne le document de l'Analyse :</h3>
@@ -108,7 +110,7 @@
                         <h3>Renseigne la Période de l'Analyse:</h3>
                         EXERCICE1:
                         <select name="exercice1">
-                            @if($lignebilans->count() > 0)
+                          @if($lignebilans->count() > 0)
                                 @foreach($lignebilans as $lignebilan)
                                     <option value="{{$lignebilan->exercice}}">{{$lignebilan->exercice}}</option>
                                 @endForeach
@@ -118,7 +120,7 @@
                         </select>
                         EXERCICE2:
                         <select name="exercice2">
-                            @if($lignebilans->count() > 0)
+                           @if($lignebilans->count() > 0)
                                 @foreach($lignebilans as $lignebilan)
                                     <option value="{{$lignebilan->exercice}}">{{$lignebilan->exercice}}</option>
                                 @endForeach
@@ -129,12 +131,28 @@
                     </div>
                     <div class="col-md-4">
                         <h3>Analyser le bilan:</h3>
-                        <a href="" class="btn btn-success btn-md" style="font-size: large" title="Add New Permission">
+                        <a href="{{--{{action('BilanController@index','bonjour')}}--}}" class="btn btn-success btn-md" style="font-size: large" title="Add New Permission">
                             <i class="fa fa-plus" aria-hidden="true"></i>Trouver
                         </a>
                     </div>
                 </div>
-                <div class="table-striped">
+                <div class="col">
+                    Numero Registre:
+                    <label type="text"></label>
+                    Raison Sociale:
+                    <label type="text"></label>
+                    Adresse:
+                    <label type="text"></label>
+                </div>
+                <div class="col">
+                    Secteur :
+                    <label type="text"></label>
+                    Activité :
+                    <label type="text"></label>
+                    Services :
+                    <label type="text"></label>
+                </div>
+              <div class="table-striped">
                     <table class="table">
                         <thead>
                         <tr>
@@ -146,23 +164,21 @@
                         </tr>
                         </thead>
                         <tbody>
-
                         @foreach($classes as $classe)
-
                             <tr>
                                 <td>{{$classe->idClasse}}</td>
-                                <td>{{$classe->nomClasse}}</td>
-                                <td>{{$classe->nature}}</td>
-                                <td>{{$classe->code}}</td>
+                            <td>{{$classe->nomClasse}}</td>
+                            <td>{{$classe->nature}}</td>
+                            <td>{{$classe->code}}</td>
 
-                                <td><a href="#" class="btn btn-warning">Edit</a></td>
-                                <td><a href="#" class="btn btn-danger">Delete</a></td>
-                                <td><a href="#" class="btn btn-info">View</a></td>
+                            <td><a href="#" class="btn btn-warning">Edit</a></td>
+                            <td><a href="#" class="btn btn-danger">Delete</a></td>
+                            <td><a href="#" class="btn btn-info">View</a></td>
                             </tr>
                         @endforeach
                         </tbody>
                     </table>
-                    {{ $classes->links() }}
+                  {{ $classes->links()}}
                 </div>
             </div>
         </div>

@@ -1,7 +1,3 @@
-
-<link rel="icon" type="image/png" href="images/Senegal.ico">
-<link href="css/style.css" rel="stylesheet" type="text/css" media="screen" />
-
 <?php
 
 /**
