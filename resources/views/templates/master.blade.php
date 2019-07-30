@@ -3,30 +3,22 @@
 <head>
 
     <title>Africa B.I.C - @yield('title')</title>
+    <link rel="icon" type="image/png" href="{{asset('images/Senegal.ico')}}" />
     <!-- Bootstrap -->
-<<<<<<< HEAD
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
 
-=======
-    <link rel="icon" type="image/png" href="images/Senegal.ico" />
-    <link href="css/style.css" rel="stylesheet" type="text/css" media="screen" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="{{asset('css/app.css')}}" />
     <script type="text/javascript" src="{{ asset('js/jquery.min.js')}}"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js"></script>
->>>>>>> 5aff8f104a6701d39d626f784f7f9aa16baea9eb
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js"></script>
-    <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+    <script src="{{url('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js')}}"></script>
+    <script src="{{url('https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js')}}"></script>
+    <script src="{{url('https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js')}}"></script>
 
-    <![endif]-->
+    <script src="{{url('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js')}}"></script>
+
 
 </head>
 
@@ -256,7 +248,7 @@
 
                     </div>
                     <div class="col-md-1 title_icon"><a href="{{url('/bilan?pays=34')}}">
-                            <img src={{asset("images/Burkina.jpg")}} title="Burkina" alt="Burkina" style="height: 5%"/></a>
+                            <img src={{asset("images/Burkina.jpg")}} title="Burkina" alt="Burkina" style="height: 8%"/></a>
 
                     </div>
                     <div class="col-md-1 title_icon"><a href="{{url('/bilan?pays=48')}}">
@@ -284,6 +276,7 @@
 
             </div>
             <div class="card-body" style="background-image: url({{asset('images/banniere.png')}});">
+
                 <form action="{{url('/bilan')}}" method="post" target="index">
                     @csrf
                     <div class="form-group row">
@@ -311,26 +304,39 @@
 
                     <div class="form-group row">
                         <div class="col-sm-6">
-                            <select class="form-control form-control-lg" name="idEntreprise" style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
-                                @if($entreprises->count() > 0)
-                                    <option  value="">Renseigne la Raison Sociale l'Entreprise :</option>
-                                    @foreach($entreprises as $entreprise)
-                                        <option   value="{{$entreprise->idEntreprise}}">{{$entreprise->nomEntreprise}}</option>
-                                    @endForeach
-                                @else
-                                    No Record Found
-                                @endif
-                            </select>
+                            <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="typeahead form-control" placeholder="Selectionner une entreprise" name="idEntreprise">
+
+                            <script type="text/javascript">
+
+                                var path = "{{ route('autocomplete', ['pays' => $pays]) }}";
+                                $('input.typeahead').typeahead({
+                                    source:  function (query, process) {
+                                        return $.get(path, { query: query }, function (data) {
+                                            return process(data);
+                                        });
+                                    }
+                                });
+                            </script>
+{{--                            <select class="form-control form-control-lg" name="idEntreprise" style="font-family: 'Times New Roman, Times, serif';font-size: 17px">--}}
+{{--                                @if($entreprises->count() > 0)--}}
+{{--                                    <option  value="">Renseigne la Raison Sociale l'Entreprise :</option>--}}
+{{--                                    @foreach($entreprises as $entreprise)--}}
+{{--                                        <option   value="{{$entreprise->idEntreprise}}">{{$entreprise->nomEntreprise}}</option>--}}
+{{--                                    @endForeach--}}
+{{--                                @else--}}
+{{--                                    No Record Found--}}
+{{--                                @endif--}}
+{{--                            </select>--}}
                         </div>
                         <div class="col-sm-3 offset-2" style="font-family: 'Times New Roman, Times, serif';
                                     font-size: 17px" >
                             <div class="form-group row">
                                 <div class="col">
-                                    <input type="radio" name="naturep" value="paran" checked> Par année
+                                    <label for=""><input type="radio" name="naturep" value="paran" checked> Par année</label>
                                 </div>
                                 <div class="col" >
-                                    <input type="radio" name="naturep" value="variation"
-                                    > Variation
+                                    <label for="">  <input type="radio" name="naturep" value="variation"
+                                    > Variation</label>
                                 </div>
                             </div>
                         </div>
@@ -363,17 +369,17 @@
                         <div class="col-sm-8"  >
                             <div class="form-group row">
                                 <div class="col-sm-2">
-                                    <input type="radio" name="document" value="bilan" checked>&nbsp; Bilan
+                                    <label for=""> <input type="radio" name="document" value="bilan" checked>&nbsp; Bilan</label>
                                 </div>
                                 <div class="col-sm-3">
-                                    <input type="radio" name="document" value="compres">&nbsp;Compte Resultat
+                                    <label for="">  <input type="radio" name="document" value="compres">&nbsp;Compte Resultat</label>
                                 </div>
 
                                 <div class="col-sm-2">
-                                    <input type="radio" name="document" value="dec2000">&nbsp;DEC 2000
+                                    <label for="">   <input type="radio" name="document" value="dec2000">&nbsp;DEC 2000</label>
                                 </div>
                                 <div class="col-sm-5">
-                                    <input type="radio" name="document" value="dec2080">&nbsp;DEC : RESULTATS <i style="font-size: 12px">(les DEC sont reservés pour l'activité des sercices financiers)</i>
+                                    <label for="">  <input type="radio" name="document" value="dec2080">&nbsp;DEC : RESULTATS </label><i style="font-size: 12px">(les DEC sont reservés pour l'activité des sercices financiers)</i>
                                 </div>
                             </div>
 
@@ -381,19 +387,19 @@
                         <div class="col-sm-3">
                             <div class="form-group row">
                                 <div class="col" >
-                                    Exercice 1
-                                    <select name="exercice1" class="form-control" style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
+                                    <label for=""> Exercice 1
+                                    <select name="exercice1" class="form-control" style="font-family: 'Times New Roman, Times, serif';font-size: 17px;height: 8%">
                                         @if($lignebilans->count() > 0)
                                             @foreach($lignebilans as $lignebilan)
                                                 <option value="{{$lignebilan->exercice}}">{{$lignebilan->exercice}}</option>
                                             @endForeach
                                         @endif
-                                    </select>
+                                    </select></label>
 
                                 </div>
                                 <div class="col">
-                                    Exercice 2
-                                    <select name="exercice2" class="form-control" style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
+                                    <label for=""> Exercice 2
+                                    <select name="exercice2" class="form-control" style="font-family: 'Times New Roman, Times, serif';font-size: 17px;height: 8%">
                                         @if($lignebilans->count() > 0)
                                             @foreach($lignebilans as $lignebilan)
                                                 <option value="{{$lignebilan->exercice}}">{{$lignebilan->exercice}}</option>
@@ -401,7 +407,7 @@
                                         @else
                                             No Record Found
                                         @endif
-                                    </select>
+                                    </select></label>
                                 </div>
                             </div>
                         </div>
@@ -424,14 +430,14 @@
                         <div class="col-sm-8"  >
                             <div class="form-group row">
                                 <div class="col-sm-4">
-                                    <input type="radio" name="localite" value="sensyyg2_senegalbd" checked>&nbsp; SENEGAL 123
+                                    <label for=""><input type="radio" name="localite" value="sensyyg2_senegalbd" checked>&nbsp; SENEGAL 123</label>
                                 </div>
                                 <div class="col-sm-4">
-                                    <input type="radio" name="localite" value="sensyyg2_umeoabd1">&nbsp; GROUPE
+                                    <label for=""><input type="radio" name="localite" value="sensyyg2_umeoabd1">&nbsp; GROUPE</label>
                                 </div>
 
                                 <div class="col-sm-4">
-                                    <input type="radio" name="localite" value="sensyyg2_umeoabd">&nbsp; UMEOA
+                                    <label for=""> <input type="radio" name="localite" value="sensyyg2_umeoabd">&nbsp; UMEOA</label>
                                 </div>
                             </div>
                         </div>

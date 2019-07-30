@@ -13,8 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
 class BilanController extends Controller
 {
-<<<<<<< HEAD
-    function getDB($request){
+
+    function getDB(Request $request){
         if($request['pays'])
             $idPays = $request['pays'];
         else
@@ -26,40 +26,42 @@ class BilanController extends Controller
         }
         return $db;
     }
-
-    function index(Request $pays){
-        $dbs = $this->getDB($pays);
-       $classes = DB::table('classe')->paginate(3);
-        $entreprises=DB::connection($dbs)->table('entreprises')->get();
-        $lignebilans=DB::table('lignebilan')->groupBy('exercice')->get('exercice');
-=======
-    function index()
+//    function index(Request $pays)
+//    {
+//        $dbs = $this->getDB($pays);
+//        $classes = DB::table('classe')->paginate(3);
+//        $entreprises = DB::connection($dbs)->table('entreprises')->get();
+//        $lignebilans = DB::table('lignebilan')->groupBy('exercice')->get('exercice');
+//    }
+    function index(Request $pays)
     {
-        $classes = DB::table('classe')->paginate(3);
-        $lignebilans = DB::table('lignebilan')->groupBy('exercice')->get('exercice');
->>>>>>> 5aff8f104a6701d39d626f784f7f9aa16baea9eb
+        $dbs = $this->getDB($pays);
+        //$classes = DB::connection($dbs)->table('classe')->paginate(3);
+        $lignebilans = DB::connection($dbs)->table('lignebilan')->groupBy('exercice')->get('exercice');
         return view('pages.bilan')
-            ->with('classes',$classes)
+            ->with('dbs',$dbs)
             ->with('lignebilans',$lignebilans);
-<<<<<<< HEAD
 }
 
     function periode(Request $request){
-=======
+
     }
     function listeEntreprises(Request $request){
-        $entreprises = Entreprises::select("nomEntreprise")
-            ->where('nomEntreprise', 'LIKE',"%{$request->input('query')}%")->get();
+
+        $dbs = $this->getDB($request);
+        $entreprises = DB::connection($dbs)->table('entreprises')
+            ->where('nomEntreprise', 'LIKE',"%{$request->input('query')}%")
+            ->orWhere('Sigle','LIKE',"%{strtoupper($request->input('query'))}%")
+            ->get(['nomEntreprise','idEntreprise']);
         $dataModified = array();
         foreach ($entreprises as $entreprise)
         {
-            $dataModified[] = $entreprise->nomEntreprise;
+            $dataModified[] = $entreprise->idEntreprise.'-'. $entreprise->nomEntreprise;
         }
         return response()->json($dataModified);
     }
 
     function recupererinfo(Request $request){
->>>>>>> 5aff8f104a6701d39d626f784f7f9aa16baea9eb
         $exercice1=$request->get('exercice1');
         $exercice2=$request->get('exercice2');
         $taux=$exercice2/$exercice1;
@@ -80,13 +82,9 @@ class BilanController extends Controller
         }
 
     }
-<<<<<<< HEAD
     function show(Request $request){
         $input = $request->all();
         //$bilan = DB::connection(getDB())->get()
         return view('pages.resBilan',compact('input'));
     }
-=======
-
->>>>>>> 5aff8f104a6701d39d626f784f7f9aa16baea9eb
 }
