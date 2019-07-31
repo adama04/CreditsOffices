@@ -56,7 +56,7 @@ class BilanController extends Controller
         }
         return response()->json($dataModified);
     }
-
+/*
     function recupererinfo(Request $request)
     {
         $dbs = $this->getDB($request);
@@ -78,7 +78,7 @@ class BilanController extends Controller
 
         }
 
-    }
+    }*/
 
     function show(Request $request)
     {
@@ -103,6 +103,7 @@ class BilanController extends Controller
             ->get();
         return view('pages.resBilan')
             ->with('input',$input)
+            ->with('dbs',$dbs)
             ->with('infoEntreprises',$infoEntreprises);
     }
 }

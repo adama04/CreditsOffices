@@ -61,7 +61,6 @@
                     <td>{{$input['localite']}}</td>
                 </tr>
                 </tbody>
-
             </table>
         </div>
     </div>

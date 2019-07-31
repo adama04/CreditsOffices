@@ -267,19 +267,18 @@
                     <div class="col-sm title_icon"><a href="{{url('/bilan?pays=201')}}">
                             <img src={{asset("images/Senegal.jpg")}} title="Senegal" alt="Senegal" style="height: 5%"/></a>
                     </div>
-                    <div class=col-sm title_icon"><a href="{{url('/bilan?pays=223')}}">
+                    <div class="col-sm title_icon"><a href="{{url('/bilan?pays=223')}}">
                             <img src={{asset("images/Togo.jpg")}} title="Togo" alt="Togo" style="height: 5%"/></a>
                     </div>
                 </div>
             </div>
-            <div class="card-body" style="background-image: url({{asset('images/banniere.png')}});">
-
-                <form action="{{url('/bilan')}}" method="post" target="index">
+            <div class="card-body" style="background-image: url(('images/banniere.png');">
+                <form action="{{url('/bilan?pays='.$pays)}}" method="post" target="index">
                     @csrf
                     <div class="form-group row">
                         <div class="col">
                             <label for="" style="font-size: 22px;color: #0355AF;
-                            font-weight: bold;font-family: 'Times New Roman, Times, serif;'"
+                            font-weight: bold;font-family: 'Times New Roman, Times, serif'"
                                    class="col-sm-10 col-form-label col-form-label-sm">
                                 <strong>
                                     Renseigne la Raison Sociale l'Entreprise :
@@ -322,8 +321,7 @@
                                     <label for=""><input type="radio" name="naturep" value="paran" checked> Par année</label>
                                 </div>
                                 <div class="col" >
-                                    <label for="">  <input type="radio" name="naturep" value="variation"
-                                    > Variation</label>
+                                    <label for="">  <input type="radio" name="naturep" value="variation"> Variation</label>
                                 </div>
                             </div>
                         </div>
