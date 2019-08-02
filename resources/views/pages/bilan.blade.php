@@ -21,7 +21,6 @@
 @endif
 
 @section('content')
-
-        <iframe src="" frameborder="0" name="index" class="col-lg-12"></iframe>
+        <iframe src="" name="index" style="width: 100%; height: 900px; border-width: 0"></iframe>
 @stop
 

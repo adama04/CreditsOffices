@@ -1,8 +1,9 @@
 <!doctype html>
 <html>
 <head>
-
+    <meta charset="UTF-8">
     <title>Africa B.I.C - @yield('title')</title>
+
     <link rel="icon" type="image/png" href="{{asset('images/Senegal.ico')}}" />
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
@@ -277,7 +278,7 @@
             </div>
             <div class="card-body" style="background-image: url({{asset('images/banniere.png')}});">
 
-                <form action="{{url('/bilan')}}" method="post" target="index">
+                <form action="{{url('/bilan?pays='.$pays)}}" method="post" target="index">
                     @csrf
                     <div class="form-group row">
                         <div class="col">
@@ -375,12 +376,7 @@
                                     <label for="">  <input type="radio" name="document" value="compres">&nbsp;Compte Resultat</label>
                                 </div>
 
-                                <div class="col-sm-2">
-                                    <label for="">   <input type="radio" name="document" value="dec2000">&nbsp;DEC 2000</label>
-                                </div>
-                                <div class="col-sm-5">
-                                    <label for="">  <input type="radio" name="document" value="dec2080">&nbsp;DEC : RESULTATS </label><i style="font-size: 12px">(les DEC sont reservés pour l'activité des sercices financiers)</i>
-                                </div>
+
                             </div>
 
                         </div>
@@ -430,7 +426,7 @@
                         <div class="col-sm-8"  >
                             <div class="form-group row">
                                 <div class="col-sm-4">
-                                    <label for=""><input type="radio" name="localite" value="sensyyg2_senegalbd" checked>&nbsp; SENEGAL 123</label>
+                                    <label for=""><input type="radio" name="localite" value="sensyyg2_senegalbd" checked>&nbsp; SENEGAL</label>
                                 </div>
                                 <div class="col-sm-4">
                                     <label for=""><input type="radio" name="localite" value="sensyyg2_umeoabd1">&nbsp; GROUPE</label>
