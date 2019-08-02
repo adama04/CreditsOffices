@@ -238,52 +238,48 @@
                                     font-size: 17px">
                         <label>L'INFORMATION L'EGAL SUR LES ENTREPRISES</label>
                     </span>
-                </div>
-                <div class="form-group row offset-3">
-                    <div class="col-md-4 title_icon" style="background-color: powderblue;height: 5%;font-family: 'Times New Roman, Times, serif';
-                                    font-size: 17px">
+                    <div class=" title_icon" style="background-color: powderblue;height: 5%;font-family: 'Times New Roman, Times, serif';
+                                    font-size:large">
                         <label for="">Analyse Financ&egrave;re</label> :&nbsp;&nbsp;
                     </div>
-                    <div class="col-md-1 title_icon"><a href="{{url('/bilan?pays=24')}}">
-                            <img src={{asset("images/Benin.jpg")}} title="Benin" alt="Benin" style="height: 5%"/></a>
+                    <div class="col-sm title_icon"><a href="{{url('/bilan?pays=24')}}">
+                            <img src={{asset("images/Benin.jpg")}} title="Benin" alt="Benin" style=""/></a>
 
                     </div>
-                    <div class="col-md-1 title_icon"><a href="{{url('/bilan?pays=34')}}">
-                            <img src={{asset("images/Burkina.jpg")}} title="Burkina" alt="Burkina" style="height: 8%"/></a>
+                    <div class="col-sm title_icon"><a href="{{url('/bilan?pays=34')}}">
+                            <img src={{asset("images/Burkina.jpg")}} title="Burkina" alt="Burkina" style=""/></a>
 
                     </div>
-                    <div class="col-md-1 title_icon"><a href="{{url('/bilan?pays=48')}}">
-                            <img src={{asset("images/Cotedivoire.jpg")}} title="Cotedivoire" alt="Cote d'ivoire"  style="height: 5%"/></a>
+                    <div class="col-sm title_icon"><a href="{{url('/bilan?pays=48')}}">
+                            <img src={{asset("images/Cotedivoire.jpg")}} title="Cotedivoire" alt="Cote d'ivoire"  style=""/></a>
 
                     </div>
-                    <div class="col-md-1 title_icon"><a href="{{url('/bilan?pays=81')}}">
-                            <img src={{asset("images/Guinneabissao.jpg")}} title="GuineeBissau" alt="Guinnee Bissau" style="height: 5%"/></a>
+                    <div class="col-sm title_icon"><a href="{{url('/bilan?pays=81')}}">
+                            <img src={{asset("images/Guinneabissao.jpg")}} title="GuineeBissau" alt="Guinnee Bissau" style=""/></a>
 
                     </div>
-                    <div class="col-md-1 title_icon"><a href="{{url('/bilan?pays=134')}}">
-                            <img src={{asset("images/Mali.jpg")}} title="Mali" alt="Mali" style="height: 5%"/></a>
+                    <div class="col-sm title_icon"><a href="{{url('/bilan?pays=134')}}">
+                            <img src={{asset("images/Mali.jpg")}} title="Mali" alt="Mali" style=""/></a>
 
                     </div>
-                    <div class="col-md-1 title_icon"><a href="{{url('/bilan?pays=154')}}">
-                            <img src={{asset("images/Niger.jpg")}} title="Niger" alt="Niger" style="height: 5%"/></a>
+                    <div class="col-sm title_icon"><a href="{{url('/bilan?pays=154')}}">
+                            <img src={{asset("images/Niger.jpg")}} title="Niger" alt="Niger" style=""/></a>
                     </div>
-                    <div class="col-md-1 title_icon"><a href="{{url('/bilan?pays=201')}}">
+                    <div class="col-sm title_icon"><a href="{{url('/bilan?pays=201')}}">
                             <img src={{asset("images/Senegal.jpg")}} title="Senegal" alt="Senegal" style="height: 5%"/></a>
                     </div>
-                    <div class="col-md-1 title_icon"><a href="{{url('/bilan?pays=223')}}">
+                    <div class="col-sm title_icon"><a href="{{url('/bilan?pays=223')}}">
                             <img src={{asset("images/Togo.jpg")}} title="Togo" alt="Togo" style="height: 5%"/></a>
                     </div>
                 </div>
-
             </div>
             <div class="card-body" style="background-image: url({{asset('images/banniere.png')}});">
-
                 <form action="{{url('/bilan?pays='.$pays)}}" method="post" target="index">
                     @csrf
                     <div class="form-group row">
                         <div class="col">
                             <label for="" style="font-size: 22px;color: #0355AF;
-                            font-weight: bold;font-family: 'Times New Roman, Times, serif;'"
+                            font-weight: bold;font-family: 'Times New Roman, Times, serif'"
                                    class="col-sm-10 col-form-label col-form-label-sm">
                                 <strong>
                                     Renseigne la Raison Sociale l'Entreprise :
@@ -318,16 +314,6 @@
                                     }
                                 });
                             </script>
-{{--                            <select class="form-control form-control-lg" name="idEntreprise" style="font-family: 'Times New Roman, Times, serif';font-size: 17px">--}}
-{{--                                @if($entreprises->count() > 0)--}}
-{{--                                    <option  value="">Renseigne la Raison Sociale l'Entreprise :</option>--}}
-{{--                                    @foreach($entreprises as $entreprise)--}}
-{{--                                        <option   value="{{$entreprise->idEntreprise}}">{{$entreprise->nomEntreprise}}</option>--}}
-{{--                                    @endForeach--}}
-{{--                                @else--}}
-{{--                                    No Record Found--}}
-{{--                                @endif--}}
-{{--                            </select>--}}
                         </div>
                         <div class="col-sm-3 offset-2" style="font-family: 'Times New Roman, Times, serif';
                                     font-size: 17px" >
@@ -336,8 +322,7 @@
                                     <label for=""><input type="radio" name="naturep" value="paran" checked> Par année</label>
                                 </div>
                                 <div class="col" >
-                                    <label for="">  <input type="radio" name="naturep" value="variation"
-                                    > Variation</label>
+                                    <label for="">  <input type="radio" name="naturep" value="variation"> Variation</label>
                                 </div>
                             </div>
                         </div>

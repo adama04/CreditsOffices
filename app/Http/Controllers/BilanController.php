@@ -16,60 +16,59 @@ use phpDocumentor\Reflection\Types\Null_;
 class BilanController extends Controller
 {
 
-    function getDB(Request $request){
-        if($request['pays'])
+    function getDB(Request $request)
+    {
+        if ($request['pays'])
             $idPays = $request['pays'];
         else
-            $idPays=201;
+            $idPays = 201;
 
-        $db = DB::table('pays')->where('idPays',$idPays)->get('bdPays');
-        foreach ($db as $d){
+        $db = DB::table('pays')->where('idPays', $idPays)->get('bdPays');
+        foreach ($db as $d) {
             $db = $d->bdPays;
         }
         return $db;
     }
-//    function index(Request $pays)
-//    {
-//        $dbs = $this->getDB($pays);
-//        $classes = DB::table('classe')->paginate(3);
-//        $entreprises = DB::connection($dbs)->table('entreprises')->get();
-//        $lignebilans = DB::table('lignebilan')->groupBy('exercice')->get('exercice');
-//    }
+
     function index(Request $pays)
     {
         $dbs = $this->getDB($pays);
-        //$classes = DB::connection($dbs)->table('classe')->paginate(3);
         $lignebilans = DB::connection($dbs)->table('lignebilan')->groupBy('exercice')->get('exercice');
         return view('pages.bilan')
-            ->with('dbs',$dbs)
-            ->with('lignebilans',$lignebilans);
-}
+            ->with('dbs', $dbs)
+            ->with('lignebilans', $lignebilans);
+    }
 
-    function periode(Request $request){
+    function periode(Request $request)
+    {
 
     }
-    function listeEntreprises(Request $request){
+
+    function listeEntreprises(Request $request)
+    {
 
         $dbs = $this->getDB($request);
         $entreprises = DB::connection($dbs)->table('entreprises')
-            ->where('nomEntreprise', 'LIKE',"%{$request->input('query')}%")
-            ->orWhere('Sigle','LIKE',"%{$request->input('query')}%")
-            ->get(['nomEntreprise','idEntreprise']);
+
+            ->where('nomEntreprise', 'LIKE', "%{$request->input('query')}%")
+            ->orWhere('Sigle', 'LIKE', "%{strtoupper($request->input('query'))}%")
+            ->get(['nomEntreprise', 'idEntreprise']);
         $dataModified = array();
-        foreach ($entreprises as $entreprise)
-        {
-            $dataModified[] = $entreprise->idEntreprise.'-'. $entreprise->nomEntreprise;
+        foreach ($entreprises as $entreprise) {
+            $dataModified[] = $entreprise->idEntreprise . '-' . $entreprise->nomEntreprise;
         }
         return response()->json($dataModified);
     }
 
-    function recupererinfo(Request $request){
-        $exercice1=$request->get('exercice1');
-        $exercice2=$request->get('exercice2');
-        $taux=$exercice2/$exercice1;
-        if($taux<1){
-            $periode=$exercice2-$exercice1;
-            $infoEntreprises = DB::table('entreprises')
+    function recupererinfo(Request $request)
+    {
+        $dbs = $this->getDB($request);
+        $exercice1 = $request->get('exercice1');
+        $exercice2 = $request->get('exercice2');
+        $taux = $exercice2 / $exercice1;
+        if ($taux < 1) {
+            $periode = $exercice2 - $exercice1;
+            $infoEntreprises = DB::connection($dbs)->table('entreprises')
                 ->join('ligneservices', 'entreprises.idEntreprise', '=', 'ligneservices.idEntreprise')
                 ->join('service', 'ligneservices.idService', '=', 'service.idService')
                 ->join('sousecteur', 'sousecteur.idSousecteur', '=', 'ligneservices.idSousecteur')
@@ -256,7 +255,7 @@ class BilanController extends Controller
             endfor;
         endif;
         $nomEntreprise=explode("-",$input['idEntreprise'])[1];
-            $infoEntreprises = DB::connection($dbs)->table('entreprises')
+        $infoEntreprises = DB::connection($dbs)->table('entreprises')
             ->join('ligneservices', 'entreprises.idEntreprise', '=', 'ligneservices.idEntreprise')
             ->join('service', 'ligneservices.idService', '=', 'service.idService')
             ->join('sousecteur', 'sousecteur.idSousecteur', '=', 'ligneservices.idSousecteur')
@@ -266,10 +265,6 @@ class BilanController extends Controller
                 'entreprises.Pays', 'entreprises.type', 'entreprises.dateCreation', 'entreprises.numEnregistre', 'sousecteur.nomsouSecteur', 'service.nomService',
                 'secteur.nomSecteur')->where('nomEntreprise','=',$nomEntreprise)
             ->get();
-
-        foreach ($infoEntreprises as $entrepris):
-            $idsousecteur = $entrepris->idsouSecteur;
-        endforeach;
         return view('pages.resBilan')
             ->with('input',$input)
             ->with('collectclassesA',$collectclassesA)

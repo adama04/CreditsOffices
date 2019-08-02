@@ -1,3 +1,4 @@
+
 @extends('templates.master')
 
 @section('title', 'Bilan')
