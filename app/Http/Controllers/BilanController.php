@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\BilansImport;
 use App\Models\Classe;
 use App\Models\Entreprises;
 use App\Models\SousClasse;
 use App\Models\Rubrique;
 use App\Models\LigneBilan;
 use App\Models\Pays;
+use App\Exports\BilansExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
+use Maatwebsite\Excel\Facades\Excel;
 class BilanController extends Controller
 {
 
@@ -36,15 +39,8 @@ class BilanController extends Controller
             ->with('dbs', $dbs)
             ->with('lignebilans', $lignebilans);
     }
-
-    function periode(Request $request)
-    {
-
-    }
-
     function listeEntreprises(Request $request)
     {
-
         $dbs = $this->getDB($request);
         $entreprises = DB::connection($dbs)->table('entreprises')
             ->where('nomEntreprise', 'LIKE', "%{$request->input('query')}%")
@@ -105,5 +101,14 @@ class BilanController extends Controller
             ->with('input',$input)
             ->with('dbs',$dbs)
             ->with('infoEntreprises',$infoEntreprises);
+    }
+    public function export()
+    {
+        return Excel::download(new BilansExport, 'bilans.xlsx');
+    }
+    public function import()
+    {
+        Excel::import(new BilansImport,request()->file('file'));
+        return back();
     }
 }

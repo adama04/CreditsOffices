@@ -23,6 +23,6 @@
 
 @section('content')
 
-        <iframe src="" frameborder="0" name="index" class="col-lg-12"></iframe>
+        <iframe src="" frameborder="0" name="index" class="col-md-12" style="background: none"></iframe>
 @stop
 

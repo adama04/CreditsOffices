@@ -1,5 +1,4 @@
 <?php
-
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -16,5 +15,6 @@ Route::get('/', function () {
 
 Route::get('/bilan/{pays?}', 'BilanController@index');
 Route::post('/bilan', 'BilanController@show');
-//Route::get('/bilan', 'BilanController@index')->name('billan');
 Route::get('autocomplete/{pays?}', 'BilanController@listeEntreprises')->name('autocomplete');
+Route::get('/export', 'BilanController@export')->name('export');
+Route::post('/import', 'BilanController@import')->name('import');

@@ -3,10 +3,10 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
 <div class="container">
     <div class="card">
-        <div class="card-header"></div>
         <div class="card-body">
+            <div class="container">
             @foreach($infoEntreprises as $infoEntreprise )
-            <div class="form-row" style="font-family: 'Times New Roman'; color: #3f9ae5; font-size: 11px">
+            <div class="form-row" style="font-family: 'Times New Roman'; color: #0355AF; font-size:medium">
                 <div class="col-md-6">
                     Numero Registre :
                     <span>{{$infoEntreprise->numRegistre}}</span>
@@ -16,7 +16,7 @@
                     <span>{{$infoEntreprise->nomSecteur}}</span>
                 </div>
             </div>
-                <div class="form-row" style="font-family: 'Times New Roman'; color: #3f9ae5; font-size: 13px">
+                <div class="form-row" style="font-family: 'Times New Roman'; color: #0355AF; font-size: medium">
                     <div class="col-md-6">
                         Raison Sociale :
                         <span>{{$infoEntreprise->nomEntreprise}}</span>
@@ -26,7 +26,7 @@
                         <span>{{$infoEntreprise->nomsouSecteur}}</span>
                     </div>
             </div>
-                <div class="form-row" style="font-family: 'Times New Roman'; color: #3f9ae5; font-size: 13px">
+                <div class="form-row" style="font-family: 'Times New Roman'; color: #0355AF; font-size: medium">
                     <div class="col-md-6">
                         Adresse :
                         <span>{{$infoEntreprise->Adresse}}</span>
@@ -37,8 +37,22 @@
                     </div>
                 </div>
             @endforeach
+            </div>
+            <form action="{{route('import')}}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <input type="file" name="file" class="form-control" style="font-family: 'Times New Roman';font-size: larger ;" >
+                    </div>
+                    <div class="col-md-4">
+                    <button  class="btn btn-success" style="font-family: 'Times New Roman';font-size: large;"><span class='glyphicon glyphicon-import'></span>Importer </button>
+                    </div>
+                    <div class="col-md-4">
+                    <a href="{{route('export')}}" class="btn btn-warning" style="font-family: 'Times New Roman';font-size: large;"><span class='glyphicon glyphicon-export' ></span>Exporter</a>
+                    </div>
+                </div>
+            </form>
             <table class="container table table-striped">
-
                 <thead>
                 <tr>
                     <td>IdEntreprise</td>
@@ -52,8 +66,8 @@
                 </thead>
                 <tbody>
                 <tr>
-                    <td>{{ explode("-",$input['idEntreprise'])[0] }}</td>
-                    <td>{{ explode("-",$input['idEntreprise'])[1]  }}</td>
+                    <td>{{ explode("-",$input['idEntreprise'])[0]}}</td>
+                    <td>{{ explode("-",$input['idEntreprise'])[1]}}</td>
                     <td>{{$input['exercice1']}}</td>
                     <td>{{$input['exercice2']}}</td>
                     <td>{{$input['naturep']}}</td>
