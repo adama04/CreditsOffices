@@ -1,8 +1,9 @@
 <!doctype html>
 <html>
 <head>
-
+    <meta charset="UTF-8">
     <title>Africa B.I.C - @yield('title')</title>
+
     <link rel="icon" type="image/png" href="{{asset('images/Senegal.ico')}}" />
     <!-- Bootstrap -->
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
@@ -221,8 +222,6 @@
     </div>   <!-- fin menu -->
 
 </div>
-
-
 <div class="#">
 
     <br/>
@@ -268,7 +267,7 @@
                     </div>
                 </div>
             </div>
-            <div class="card-body" style="background-image: url(('images/banniere.png');">
+            <div class="card-body">
                 <form action="{{url('/bilan?pays='.$pays)}}" method="post" target="index">
                     @csrf
                     <div class="form-group row">
@@ -371,10 +370,10 @@
                             <label for=""><input type="radio" name="document" value="compres">&nbsp;Compte Resultat</label>
                         </div>
                         <div class="col"  style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
-                                    <label for=""><input type="radio" name="localite" value="sensyyg2_senegalbd" checked>&nbsp; SENEGAL 123</label>
-                                    <label for=""><input type="radio" name="localite" value="sensyyg2_umeoabd1">&nbsp; GROUPE</label>
-                                    <label for=""> <input type="radio" name="localite" value="sensyyg2_umeoabd">&nbsp; UMEOA</label>
-                        </div>
+                            <label for=""><input type="radio" name="localite" value="sensyyg2_senegalbd" checked>SENEGAL</label>
+                            <label for=""><input type="radio" name="localite" value="sensyyg2_umeoabd1">&nbsp; GROUPE</label>
+                            <label for=""> <input type="radio" name="localite" value="sensyyg2_umeoabd">&nbsp; UMEOA</label>
+                    </div>
                         <div class="col">
                             <button type="submit" class="btn btn-primary" name="ajouter" style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
                                 <i class="icon-ok "></i>Trouver</button>
