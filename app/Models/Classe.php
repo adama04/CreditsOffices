@@ -35,7 +35,7 @@ class Classe extends Model
    public $incrementing = false;
     /**
      *
-     *
+     * pour eviter l'insertion de la colonne updated_at
      *
      */
 public $timestamps = false;

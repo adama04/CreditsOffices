@@ -44,12 +44,14 @@
                     <div class="col-md-4">
                         <input type="file" name="file" class="form-control" style="font-family: 'Times New Roman';font-size: larger ;" >
                     </div>
-                    <div class="col-md-4">
-                    <button  class="btn btn-success" style="font-family: 'Times New Roman';font-size: large;"><span class='glyphicon glyphicon-import'></span>Importer </button>
+                    <div class="col-md-2">
+                    <button  class="btn btn-success" style="font-family: 'Times New Roman';font-size: larger;"><span class='glyphicon glyphicon-import'></span>Importer </button>
                     </div>
-                    <div class="col-md-4">
-                    <a href="{{route('export')}}" class="btn btn-warning" style="font-family: 'Times New Roman';font-size: large;"><span class='glyphicon glyphicon-export' ></span>Exporter</a>
+                    <div class="col-md-2">
+                    <a href="{{route('export')}}" class="btn btn-warning" style="font-family: 'Times New Roman';font-size: larger;"><span class='glyphicon glyphicon-export' ></span>Exporter</a>
                     </div>
+                    <div class="col-md-2">
+                        <a href="" class="btn btn-success" style="font-family: 'Times New Roman';font-size: larger;">Export PDF</a></div>
                 </div>
             </form>
             <table class="container table table-striped">

@@ -108,7 +108,15 @@ class BilanController extends Controller
     }
     public function import()
     {
-        Excel::import(new BilansImport,request()->file('file'));
+        Excel::import(new BilansImport, request()->file('file'));
         return back();
     }
+   public function export_pdf(Request $request)
+   {
+       $dbs = $this->getDB($request);
+       $data=DB::connection($dbs)->table('classe')->get();
+       $pdf = PDF::loadView('pdf.classes', $data);
+       return $pdf->download('classes.pdf');
+   }
+
 }
