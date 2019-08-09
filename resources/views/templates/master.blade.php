@@ -6,10 +6,12 @@
 
     <link rel="icon" type="image/png" href="{{asset('images/Senegal.ico')}}" />
     <!-- Bootstrap -->
+    <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
+    <link href="//netdna.bootstrapcdn.com/font-awesome/3.2.1/css/font-awesome.css" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
-
+    <link rel="stylesheet" href="{{asset('css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
 
@@ -213,16 +215,13 @@
                         Rediation de Privilèges et Nantissments</a></li>
                 <li><a href="#">
                         Information sur les Privilèges et Nantissements </a></li>
-                <li><a href="#">
-                        Tarif des Privilèges et Nantissements</a></li>
+                <li><a href="#">Tarif des Privilèges et Nantissements</a></li>
             </ul>
         </li>
 
     </div>   <!-- fin menu -->
 
 </div>
-
-
 <div class="#">
 
     <br/>
@@ -235,7 +234,7 @@
                         <img src={{asset("images/bullet.jpg")}} alt="" title="" />
                     </span>
                     <span class="title_icon" style="font-family: 'Times New Roman, Times, serif';
-                                    font-size: 17px">
+                                    font-size: 15px">
                         <label>L'INFORMATION L'EGAL SUR LES ENTREPRISES</label>
                     </span>
                     <div class=" title_icon" style="background-color: powderblue;height: 5%;font-family: 'Times New Roman, Times, serif';
@@ -244,67 +243,63 @@
                     </div>
                     <div class="col-sm title_icon"><a href="{{url('/bilan?pays=24')}}">
                             <img src={{asset("images/Benin.jpg")}} title="Benin" alt="Benin" style=""/></a>
-
                     </div>
                     <div class="col-sm title_icon"><a href="{{url('/bilan?pays=34')}}">
                             <img src={{asset("images/Burkina.jpg")}} title="Burkina" alt="Burkina" style=""/></a>
-
                     </div>
                     <div class="col-sm title_icon"><a href="{{url('/bilan?pays=48')}}">
                             <img src={{asset("images/Cotedivoire.jpg")}} title="Cotedivoire" alt="Cote d'ivoire"  style=""/></a>
-
                     </div>
                     <div class="col-sm title_icon"><a href="{{url('/bilan?pays=81')}}">
                             <img src={{asset("images/Guinneabissao.jpg")}} title="GuineeBissau" alt="Guinnee Bissau" style=""/></a>
-
                     </div>
                     <div class="col-sm title_icon"><a href="{{url('/bilan?pays=134')}}">
                             <img src={{asset("images/Mali.jpg")}} title="Mali" alt="Mali" style=""/></a>
-
                     </div>
                     <div class="col-sm title_icon"><a href="{{url('/bilan?pays=154')}}">
                             <img src={{asset("images/Niger.jpg")}} title="Niger" alt="Niger" style=""/></a>
                     </div>
                     <div class="col-sm title_icon"><a href="{{url('/bilan?pays=201')}}">
-                            <img src={{asset("images/Senegal.jpg")}} title="Senegal" alt="Senegal" style="height: 5%"/></a>
+                            <img src={{asset("images/Senegal.jpg")}} title="Senegal" alt="Senegal" style=""/></a>
                     </div>
                     <div class="col-sm title_icon"><a href="{{url('/bilan?pays=223')}}">
-                            <img src={{asset("images/Togo.jpg")}} title="Togo" alt="Togo" style="height: 5%"/></a>
+                            <img src={{asset("images/Togo.jpg")}} title="Togo" alt="Togo" style=""/></a>
                     </div>
                 </div>
             </div>
-            <div class="card-body" style="background-image: url({{asset('images/banniere.png')}});">
+            <div class="card-body">
                 <form action="{{url('/bilan?pays='.$pays)}}" method="post" target="index">
                     @csrf
                     <div class="form-group row">
                         <div class="col">
-                            <label for="" style="font-size: 22px;color: #0355AF;
-                            font-weight: bold;font-family: 'Times New Roman, Times, serif'"
-                                   class="col-sm-10 col-form-label col-form-label-sm">
+                            <label for="" style="font-size:medium;color: #0355AF;
+                            font-weight: bold;font-family: 'Times New Roman, Times, serif'">
                                 <strong>
                                     Renseigne la Raison Sociale l'Entreprise :
                                 </strong>
                             </label>
                         </div>
-
                         <div class="col">
-                            <label for="" style="font-size: 22px;color: #0355AF;
-                            font-weight: bold;font-family: 'Times New Roman, Times, serif;'"
-                                   class="col-sm-9 col-form-label col-form-label-sm offset-3">
+                            <label for="" style="font-size:medium;color: #0355AF;
+                            font-weight: bold;font-family: 'Times New Roman, Times'">
                                 <strong>
                                     Renseigne la nature de la pr&eacute;riodicit&eacute; :
                                 </strong>
                             </label>
                         </div>
-
+                        <div class="col">
+                            <label for="" style="font-size: medium;color: #0355AF;
+                            font-weight: bold;font-family: 'Times New Roman, Times, serif;'">
+                                <strong>
+                                    Renseigne la Période de l'Analyse:
+                                </strong>
+                            </label>
+                        </div>
                     </div>
-
                     <div class="form-group row">
-                        <div class="col-sm-6">
+                        <div class="col">
                             <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="typeahead form-control" placeholder="Selectionner une entreprise" name="idEntreprise">
-
                             <script type="text/javascript">
-
                                 var path = "{{ route('autocomplete', ['pays' => $pays]) }}";
                                 $('input.typeahead').typeahead({
                                     source:  function (query, process) {
@@ -315,137 +310,86 @@
                                 });
                             </script>
                         </div>
-                        <div class="col-sm-3 offset-2" style="font-family: 'Times New Roman, Times, serif';
-                                    font-size: 17px" >
-                            <div class="form-group row">
-                                <div class="col">
+                                <div class="col" style="font-family: 'Times New Roman, Times, serif';
+                                    font-size: 17px">
                                     <label for=""><input type="radio" name="naturep" value="paran" checked> Par année</label>
+                                    <label for=""><input type="radio" name="naturep" value="variation"> Variation</label>
                                 </div>
-                                <div class="col" >
-                                    <label for="">  <input type="radio" name="naturep" value="variation"> Variation</label>
-                                </div>
+                            <div class="col" >
+                                <label for=""> Exercice 1
+                                    <select name="exercice1" class="form-control" style="font-family: 'Times New Roman, Times, serif';font-size: 17px;height: 8%">
+                                        @if($lignebilans->count() > 0)
+                                        @foreach($lignebilans as $lignebilan)
+                                        <option value="{{$lignebilan->exercice}}">{{$lignebilan->exercice}}</option>
+                                        @endForeach
+                                        @endif
+                                    </select>
+                                </label>
+                                <label for=""> Exercice 2
+                                    <select name="exercice2" class="form-control" style="font-family: 'Times New Roman, Times, serif';font-size: 17px;height: 8%">
+                                        @if($lignebilans->count() > 0)
+                                        @foreach($lignebilans as $lignebilan)
+                                        <option value="{{$lignebilan->exercice}}">{{$lignebilan->exercice}}</option>
+                                        @endForeach
+                                        @else
+                                        No Record Found
+                                        @endif
+                                    </select>
+                                </label>
                             </div>
-                        </div>
                     </div>
-
                     <div class="form-group row">
                         <div class="col">
-                            <label for="" style="font-size: 22px;color: #0355AF;
-                            font-weight: bold;font-family: 'Times New Roman, Times, serif;'"
-                                   class="col-sm-10 col-form-label col-form-label-sm">
+                            <label for="" style="font-size: medium;color: #0355AF;
+                            font-weight: bold;font-family: 'Times New Roman, Times, serif;'">
                                 <strong>
                                     Renseigne le document de l'Analyse :
                                 </strong>
                             </label>
                         </div>
-
                         <div class="col">
-                            <label for="" style="font-size: 22px;color: #0355AF;
-                            font-weight: bold;font-family: 'Times New Roman, Times, serif;'"
-                                   class="col-sm-9 col-form-label col-form-label-sm offset-3">
-                                <strong>
-                                    Renseigne la Période de l'Analyse:
-                                </strong>
-                            </label>
-                        </div>
-
-                    </div>
-                    <div class="form-group row" style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
-
-                        <div class="col-sm-8"  >
-                            <div class="form-group row">
-                                <div class="col-sm-2">
-                                    <label for=""> <input type="radio" name="document" value="bilan" checked>&nbsp; Bilan</label>
-                                </div>
-                                <div class="col-sm-3">
-                                    <label for="">  <input type="radio" name="document" value="compres">&nbsp;Compte Resultat</label>
-                                </div>
-
-
-                            </div>
-
-                        </div>
-                        <div class="col-sm-3">
-                            <div class="form-group row">
-                                <div class="col" >
-                                    <label for=""> Exercice 1
-                                    <select name="exercice1" class="form-control" style="font-family: 'Times New Roman, Times, serif';font-size: 17px;height: 8%">
-                                        @if($lignebilans->count() > 0)
-                                            @foreach($lignebilans as $lignebilan)
-                                                <option value="{{$lignebilan->exercice}}">{{$lignebilan->exercice}}</option>
-                                            @endForeach
-                                        @endif
-                                    </select></label>
-
-                                </div>
-                                <div class="col">
-                                    <label for=""> Exercice 2
-                                    <select name="exercice2" class="form-control" style="font-family: 'Times New Roman, Times, serif';font-size: 17px;height: 8%">
-                                        @if($lignebilans->count() > 0)
-                                            @foreach($lignebilans as $lignebilan)
-                                                <option value="{{$lignebilan->exercice}}">{{$lignebilan->exercice}}</option>
-                                            @endForeach
-                                        @else
-                                            No Record Found
-                                        @endif
-                                    </select></label>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <div class="col">
-                            <label for="" style="font-size: 22px;color: #0355AF;
-                            font-weight: bold;font-family: 'Times New Roman, Times, serif;'"
-                                   class="col-sm-10 col-form-label col-form-label-sm">
+                            <label for="" style="font-size:medium;color: #0355AF;
+                            font-weight: bold;font-family: 'Times New Roman, Times, serif;'">
                                 <strong>
                                     Renseigne l'espace communautaire de l'analyse :
                                 </strong>
                             </label>
                         </div>
-
-                    </div>
-
-                    <div class="form-group row" style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
-
-                        <div class="col-sm-8"  >
-                            <div class="form-group row">
-                                <div class="col-sm-4">
-                                    <label for=""><input type="radio" name="localite" value="sensyyg2_senegalbd" checked>&nbsp; SENEGAL</label>
-                                </div>
-                                <div class="col-sm-4">
-                                    <label for=""><input type="radio" name="localite" value="sensyyg2_umeoabd1">&nbsp; GROUPE</label>
-                                </div>
-
-                                <div class="col-sm-4">
-                                    <label for=""> <input type="radio" name="localite" value="sensyyg2_umeoabd">&nbsp; UMEOA</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-sm-4">
-                            <button type="submit" class="btn btn-primary offset-2" name="ajouter" style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
-                                <i class="glyphicon glyphicon-plus"></i>Trouver</button>
+                        <div class="col">
+                            <label for="" style="font-size:medium;color: #0355AF;
+                            font-weight: bold;font-family: 'Times New Roman, Times, serif;'">
+                                <strong>
+                                    Faites votre analyse :
+                                </strong>
+                            </label>
                         </div>
                     </div>
-
+                    <div class="form-group row" >
+                        <div class="col" style="font-family: 'Times New Roman, Times, serif';font-size: 17px" >
+                            <label for=""><input type="radio" name="document" value="bilan" checked>&nbsp; Bilan</label>
+                            <label for=""><input type="radio" name="document" value="compres">&nbsp;Compte Resultat</label>
+                        </div>
+                        <div class="col"  style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
+                            <label for=""><input type="radio" name="localite" value="sensyyg2_senegalbd" checked>SENEGAL</label>
+                            <label for=""><input type="radio" name="localite" value="sensyyg2_umeoabd1">&nbsp; GROUPE</label>
+                            <label for=""> <input type="radio" name="localite" value="sensyyg2_umeoabd">&nbsp; UMEOA</label>
+                    </div>
+                        <div class="col">
+                            <button type="submit" class="btn btn-primary" name="ajouter" style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
+                                <i class="icon-ok "></i>Trouver</button>
+                        </div>
+                    </div>
                 </form>
             </div>
         </div>
     </div>
-</div>
 <br>
 <div class="#">
-
     @yield("content")
-
 </div>
-
 <div class="#">
-
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
-
 </div>
-
 </body>
 </html>

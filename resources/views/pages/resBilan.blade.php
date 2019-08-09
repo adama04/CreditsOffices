@@ -18,20 +18,20 @@
 <div class="container">
     <div class="card">
         <div class="card-body">
+            <div class="container">
             @foreach($infoEntreprises as $infoEntreprise )
-                <div class="form-row" style="font-family: 'Times New Roman'; color: #3f9ae5; font-size: 11px">
-                    <div class="col-md-6">
-                        <label for="">
-                            Numero Registre : {{$infoEntreprise->numRegistre}}
-                        </label>
-                    </div>
-                    <div class="col-md-6">
-                        <label for="">
-                            Secteur : {{$infoEntreprise->nomSecteur}}
-                        </label>
-                    </div>
+            <div class="form-row" style="font-family: 'Times New Roman'; color: #0355AF; font-size:medium">
+                <div class="col-md-6">
+                    Numero Registre :
+                    <span>{{$infoEntreprise->numRegistre}}</span>
                 </div>
-                <div class="form-row" style="font-family: 'Times New Roman'; color: #3f9ae5; font-size: 13px">
+                <div class="col-md-6">
+                    Secteur :
+                    <span>{{$infoEntreprise->nomSecteur}}</span>
+                </div>
+            </div>
+
+                <div class="form-row" style="font-family: 'Times New Roman'; color: #0355AF; font-size: medium">
                     <div class="col-md-6">
                         <label for="">
                             Raison Sociale : {{ $infoEntreprise->nomEntreprise }}
@@ -42,22 +42,32 @@
                             Activité principal :
                             {{ $infoEntreprise->nomsouSecteur }}
                         </label>
-                    </div>
-                </div>
-                <div class="form-row" style="font-family: 'Times New Roman'; color: #3f9ae5; font-size: 13px">
-                    <div class="col-md-6">
-                        <label for="">
-                            Adresse : {{$infoEntreprise->Adresse}}
-                        </label>
+                        Adresse :
+                        <span>{{$infoEntreprise->Adresse}}</span>
                     </div>
                     <div class="col-md-6">
-                        <label for="">
-                            Services :
-                            {{$infoEntreprise->nomService}}
-                        </label>
+                        Services :
+                        <span>{{$infoEntreprise->nomService}}</span>
                     </div>
                 </div>
             @endforeach
+            </div>
+            <form action="{{route('import')}}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="form-group row">
+                    <div class="col-md-4">
+                        <input type="file" name="file" class="form-control" style="font-family: 'Times New Roman';font-size: larger ;" >
+                    </div>
+                    <div class="col-md-2">
+                    <button  class="btn btn-success" style="font-family: 'Times New Roman';font-size: larger;"><span class='glyphicon glyphicon-import'></span>Importer </button>
+                    </div>
+                    <div class="col-md-2">
+                    <a href="{{route('export')}}" class="btn btn-warning" style="font-family: 'Times New Roman';font-size: larger;"><span class='glyphicon glyphicon-export' ></span>Exporter</a>
+                    </div>
+                    <div class="col-md-2">
+                        <a href="" class="btn btn-success" style="font-family: 'Times New Roman';font-size: larger;">Export PDF</a></div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
