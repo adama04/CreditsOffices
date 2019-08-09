@@ -9,11 +9,14 @@
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/bilan/{pays?}', 'BilanController@index');
-Route::post('/bilan', 'BilanController@show');
+Route::post('/bilan', 'BilanController@bilan');
+//Route::get('/bilan', 'BilanController@index')->name('billan');
+
 Route::get('autocomplete/{pays?}', 'BilanController@listeEntreprises')->name('autocomplete');
 Route::get('/export', 'BilanController@export')->name('export');
 Route::post('/import', 'BilanController@import')->name('import');
