@@ -514,6 +514,13 @@ class ComposerStaticInit0a4ae66310e5fdc6dfbd20ca009751a3
                 0 => __DIR__ . '/..' . '/mockery/mockery/library',
             ),
         ),
+        'L' => 
+        array (
+            'LynX39\\LaraPdfMerger' => 
+            array (
+                0 => __DIR__ . '/..' . '/lynx39/lara-pdf-merger/src',
+            ),
+        ),
     );
 
     public static $classMap = array (
@@ -2557,6 +2564,9 @@ class ComposerStaticInit0a4ae66310e5fdc6dfbd20ca009751a3
         'League\\Flysystem\\Util\\ContentListingFormatter' => __DIR__ . '/..' . '/league/flysystem/src/Util/ContentListingFormatter.php',
         'League\\Flysystem\\Util\\MimeType' => __DIR__ . '/..' . '/league/flysystem/src/Util/MimeType.php',
         'League\\Flysystem\\Util\\StreamHasher' => __DIR__ . '/..' . '/league/flysystem/src/Util/StreamHasher.php',
+        'LynX39\\LaraPdfMerger\\Facades\\PdfMerger' => __DIR__ . '/..' . '/lynx39/lara-pdf-merger/src/LynX39/LaraPdfMerger/Facades/PdfMerger.php',
+        'LynX39\\LaraPdfMerger\\PdfManage' => __DIR__ . '/..' . '/lynx39/lara-pdf-merger/src/LynX39/LaraPdfMerger/PdfManage.php',
+        'LynX39\\LaraPdfMerger\\PdfMergerServiceProvider' => __DIR__ . '/..' . '/lynx39/lara-pdf-merger/src/LynX39/LaraPdfMerger/PdfMergerServiceProvider.php',
         'Maatwebsite\\Excel\\Cell' => __DIR__ . '/..' . '/maatwebsite/excel/src/Cell.php',
         'Maatwebsite\\Excel\\ChunkReader' => __DIR__ . '/..' . '/maatwebsite/excel/src/ChunkReader.php',
         'Maatwebsite\\Excel\\Concerns\\Exportable' => __DIR__ . '/..' . '/maatwebsite/excel/src/Concerns/Exportable.php',

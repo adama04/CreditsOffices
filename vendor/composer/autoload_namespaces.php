@@ -11,4 +11,5 @@ return array(
     'PhpOption\\' => array($vendorDir . '/phpoption/phpoption/src'),
     'Parsedown' => array($vendorDir . '/erusev/parsedown'),
     'Mockery' => array($vendorDir . '/mockery/mockery/library'),
+    'LynX39\\LaraPdfMerger' => array($vendorDir . '/lynx39/lara-pdf-merger/src'),
 );

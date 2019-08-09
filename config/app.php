@@ -1,5 +1,8 @@
 <?php
 
+use LynX39\LaraPdfMerger\PdfMergerServiceProvider;
+use Maatwebsite\Excel\ExcelServiceProvider;
+
 return [
 
     /*
@@ -161,22 +164,21 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
-        Maatwebsite\Excel\ExcelServiceProvider::class,
-        Barryvdh\DomPDF\ServiceProvider::class,
-
-        /*
-         * Package Service Providers...
-         */
 
         /*
          * Application Service Providers...
          */
         App\Providers\AppServiceProvider::class,
         App\Providers\AuthServiceProvider::class,
-        // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
 
+        /*
+         * Package Service Providers
+         */
+        Maatwebsite\Excel\ExcelServiceProvider::class,
+        LynX39\LaraPdfMerger\PdfMergerServiceProvider::class,
+        Barryvdh\DomPDF\ServiceProvider::class,
     ],
 
     /*
@@ -228,7 +230,8 @@ return [
         'Validator' => Illuminate\Support\Facades\Validator::class,
         'View' => Illuminate\Support\Facades\View::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
-        'PDF' => Barryvdh\DomPDF\Facade::class,
+        'PdfMerger' => LynX39\LaraPdfMerger\Facades\PdfMerger::class,
+        'PDF'  => Barryvdh\DomPDF\Facade::class,
     ],
 
 ];

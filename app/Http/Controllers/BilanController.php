@@ -10,6 +10,7 @@ use App\Models\Rubrique;
 use App\Models\LigneBilan;
 use App\Models\Pays;
 use App\Exports\BilansExport;
+use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\View\View;
@@ -280,12 +281,15 @@ class BilanController extends Controller
         Excel::import(new BilansImport, request()->file('file'));
         return back();
     }
-   public function export_pdf(Request $request)
+
+    /**
+     * @return mixed
+     */
+    public function export_pdf()
    {
-       $dbs = $this->getDB($request);
-       $data=DB::connection($dbs)->table('classe')->get();
-       $pdf = PDF::loadView('pdf.classes', $data);
-       return $pdf->download('classes.pdf');
+       $data = ['title' => 'Laravel 5.8 HTML to PDF'];
+       $pdf = PDF::loadView('pages.resBilan', $data);
+       return $pdf->download('bilans.pdf');
    }
 
 }
