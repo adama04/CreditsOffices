@@ -376,6 +376,7 @@
                         <div class="col">
                             <button type="submit" class="btn btn-primary" name="ajouter" style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
                                 <i class="icon-ok "></i>Trouver</button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -394,7 +395,7 @@
 
         <!-- Copyright -->
         <div class="footer-copyright text-center py-4" style="font-family: 'Times New Roman';font-size: large">© 2019 Copyright:
-            <a href="https://mdbootstrap.com/education/bootstrap/"> MDBootstrap.com</a>
+            <a href="https://mdbootstrap.com/education/bootstrap/">Analyse Financière</a>
         </div>
         <!-- Copyright -->
 

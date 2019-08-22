@@ -5,20 +5,16 @@
     @php
         $exercice1 = $input['exercice2'];
         $exercice2 = $input['exercice1'];
-    @endphp
+
+@endphp
 @else
     @php($exercice1 = $input['exercice1'])
     @php($exercice2 = $input['exercice2'])
 @endif
-{{--{{ dd($collectclassesA) }}--}}
-{{--{{ dump($collecttotalclassesA) }}--}}
-{{--{{ dd($collecttotalclassesAGlobal) }}--}}
-{{--{{ dd($exercices) }}--}}
-{{--{{ dd($collecttotalclassesA) }}--}}
+@php( $nomEntreprise = $input['idEntreprise'])
 <div class="container">
     <div class="card">
         <div class="card-body">
-            <div class="container">
             @foreach($infoEntreprises as $infoEntreprise )
             <div class="form-row" style="font-family: 'Times New Roman'; color: #0355AF; font-size:medium">
                 <div class="col-md-6">
@@ -33,15 +29,20 @@
 
                 <div class="form-row" style="font-family: 'Times New Roman'; color: #0355AF; font-size: medium">
                     <div class="col-md-6">
-                        <label for="">
-                            Raison Sociale : {{ $infoEntreprise->nomEntreprise }}
-                        </label>
+                        Raison Sociale :
+                        <span>
+                             {{ $infoEntreprise->nomEntreprise }}
+                        </span>
                     </div>
                     <div class="col-md-6">
-                        <label for="">
-                            Activité principal :
+                        Activité principal :
+                        <span>
                             {{ $infoEntreprise->nomsouSecteur }}
-                        </label>
+                        </span>
+                    </div>
+                </div>
+                    <div class="form-row" style="font-family: 'Times New Roman'; color: #0355AF; font-size: medium">
+                        <div class="col-md-6">
                         Adresse :
                         <span>{{$infoEntreprise->Adresse}}</span>
                     </div>
@@ -51,33 +52,94 @@
                     </div>
                 </div>
             @endforeach
-            </div>
-            <form action="{{route('import')}}" method="POST" enctype="multipart/form-data">
+            <div class="form-group row">
+                <div class="col-md-3">
+                </div>
+                <div class="col-md-3">
+            <form action="{{route('export')}}" method="POST" enctype="multipart/form-data">
                 @csrf
-                <div class="form-group row">
-                    <div class="col-md-4">
-                        <input type="file" name="file" class="form-control" style="font-family: 'Times New Roman';font-size: larger ;" >
-                    </div>
+                <div class="form-group row ">
                     <div class="col-md-2">
-                    <button  class="btn btn-success" style="font-family: 'Times New Roman';font-size: larger;"><span class='glyphicon glyphicon-import'></span>Importer </button>
+                        <button class="btn btn-success" type="submit" style="font-family: 'Times New Roman';font-size: large;"><span class='glyphicon glyphicon-export' ></span>Exporter Excel</button>
                     </div>
-                    <div class="col-md-2">
-                    <a href="{{route('export')}}" class="btn btn-warning" style="font-family: 'Times New Roman';font-size: larger;"><span class='glyphicon glyphicon-export' ></span>Exporter</a>
+                <div class="form-group row" hidden="hidden">
+                    <div class="col">
+                        <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="typeahead form-control" placeholder="Selectionner une entreprise" name="idEntreprise" value="{{ $input['idEntreprise'] }}">
                     </div>
+                    <div class="col">
+                        <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="form-control" placeholder="Selectionner une entreprise" name="exercice1" value="{{ $input['exercice1'] }}">
+                    </div>
+                    <div class="col">
+                        <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="form-control" placeholder="Selectionner une entreprise" name="exercice2" value="{{ $input['exercice2'] }}">
+                    </div>
+                    <div class="col" style="font-family: 'Times New Roman, Times, serif';
+                                    font-size: 17px">
+                        <label for=""><input type="radio" name="naturep" value="paran" checked> Par année</label>
+                        <label for=""><input type="radio" name="naturep" value="variation"> Variation</label>
+                    </div>
+                </div>
+                <div class="form-group row" hidden="hidden" >
+                    <div class="col" style="font-family: 'Times New Roman, Times, serif';font-size: 17px" >
+                        <label for=""><input type="radio" name="document" value="bilan" checked>&nbsp; Bilan</label>
+                        <label for=""><input type="radio" name="document" value="compres">&nbsp;Compte Resultat</label>
+                    </div>
+                    <div class="col"  style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
+                        <label for=""><input type="radio" name="localite" value="sensyyg2_senegalbd" checked>SENEGAL</label>
+                        <label for=""><input type="radio" name="localite" value="sensyyg2_umeoabd1">&nbsp; GROUPE</label>
+                        <label for=""> <input type="radio" name="localite" value="sensyyg2_umeoabd">&nbsp; UMEOA</label>
+                    </div>
+
+                </div>
+        </div>
+            </form>
+                </div>
+                    <div class="col-md-3">
+            <form action="{{route('export_pdf')}}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="form-group row col-md-12">
                     <div class="col-md-2">
-                        <a href="{{ route('export_pdf') }}" class="btn btn-success" style="font-family: 'Times New Roman';font-size: larger;">Export PDF</a></div>
+                        <button class="btn btn-primary" type="submit" style="font-family: 'Times New Roman';font-size: large;"><span class='glyphicon glyphicon-export' ></span>Exporter PDF</button>
+                    </div>
+                    <div class="form-group row" hidden="hidden">
+                        <div class="col">
+                            <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="typeahead form-control" placeholder="Selectionner une entreprise" name="idEntreprise" value="{{ $input['idEntreprise'] }}">
+                        </div>
+                        <div class="col">
+                            <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="form-control" placeholder="Selectionner une entreprise" name="exercice1" value="{{ $input['exercice1'] }}">
+                        </div>
+                        <div class="col">
+                            <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="form-control" placeholder="Selectionner une entreprise" name="exercice2" value="{{ $input['exercice2'] }}">
+                        </div>
+                        <div class="col" style="font-family: 'Times New Roman, Times, serif';
+                                    font-size: 17px">
+                            <label for=""><input type="radio" name="naturep" value="paran" checked> Par année</label>
+                            <label for=""><input type="radio" name="naturep" value="variation"> Variation</label>
+                        </div>
+                    </div>
+                    <div class="form-group row" hidden="hidden" >
+                        <div class="col" style="font-family: 'Times New Roman, Times, serif';font-size: 17px" >
+                            <label for=""><input type="radio" name="document" value="bilan" checked>&nbsp; Bilan</label>
+                            <label for=""><input type="radio" name="document" value="compres">&nbsp;Compte Resultat</label>
+                        </div>
+                        <div class="col"  style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
+                            <label for=""><input type="radio" name="localite" value="sensyyg2_senegalbd" checked>SENEGAL</label>
+                            <label for=""><input type="radio" name="localite" value="sensyyg2_umeoabd1">&nbsp; GROUPE</label>
+                            <label for=""> <input type="radio" name="localite" value="sensyyg2_umeoabd">&nbsp; UMEOA</label>
+                        </div>
+
+                    </div>
                 </div>
             </form>
-        </div>
-    </div>
+                    </div>
+                <div class="col-md-3">
+                </div>
+            </div>
 @if($exercice2 - $exercice1 >= 5)
     <div class="alert alert-danger container">
         {{ 'Periode trop grand choisir sur 5 ans' }}
     </div>
 @else
-    <table class="table table-condensed"></table>
-</div>
-    <table class="table table-condensed" style="font-size: 12px">
+    <table class="table table-condensed table-responsive" style="font-size: 12px">
         <thead  >
         <tr style="font-size: 14px">
             <th style="text-align: right;">Exrecices : </th>
@@ -103,10 +165,10 @@
                 @endforeach
             </th>
             @for ($exo = $exercice1; $exo<=$exercice2; $exo++ )
-                <th >M. (CFA)</th>
-                <th >% / T.E</th>
-                <th style="background-color: #F3F3F3;">M. (CFA)</th>
-                <th style="background-color: #F3F3F3">% / T.S</th>
+                <th >M.(CFA)</th>
+                <th >%/T.E</th>
+                <th style="background-color: #F3F3F3;">M.(CFA)</th>
+                <th style="background-color: #F3F3F3">%/T.S</th>
                 <th style="background-color: #BCDAC5">P.D.M</th>
                 <th style="background-color: #BCDAC5">R.P.E.S</th>
                 <th style="background-color: #3f9ae5">Brut</th>
@@ -247,144 +309,9 @@
                 @endforeach
             @endforeach
         </tr>
-        {{-- Passifs ou Produits --}}
-{{--        <tr>--}}
-{{--            <th style="background-color: #D0FDEB; text-align: left;">--}}
-{{--                @foreach($collectclassesB as $collectclasseB)--}}
-{{--                    {{ strtoupper($collectclasseB->nature)  }}--}}
-{{--                    @break;--}}
-{{--                @endforeach--}}
-{{--            </th>--}}
-{{--            @for ($exo = $exercice1; $exo<=$exercice2; $exo++ )--}}
-{{--                <th ></th>--}}
-{{--                <th ></th>--}}
-{{--                <th ></th>--}}
-{{--                <th ></th>--}}
-{{--                <th ></th>--}}
-{{--                <th ></th>--}}
-{{--            @endfor--}}
-{{--        </tr>--}}
-{{--        @foreach($classesB as $classeB)--}}
-{{--            <tr style="font-size: 12px; text-align: right;">--}}
-{{--                <th >{{ $classeB->nomClasse }}</th>--}}
-{{--                @foreach($collectclassesB as $collectclasseB)--}}
-{{--                    @if($collectclasseB->nomClasse != $classeB->nomClasse)--}}
-{{--                        @continue--}}
-{{--                    @else--}}
-{{--                        @foreach($exercices as $exercice)--}}
-{{--                            @if($collectclasseB->exercice != $exercice->exercice)--}}
-{{--                                @continue--}}
-{{--                            @else--}}
-{{--                                @foreach($collecttotalclassesB as $collecttotalclasseB)--}}
-{{--                                    @if($collecttotalclasseB->exercice != $exercice->exercice)--}}
-{{--                                        @continue--}}
-{{--                                    @else--}}
-{{--                                        @foreach($collectclassesBGlobal as $collectclasseBGlobal)--}}
-{{--                                            @if($collecttotalclasseB->exercice != $collectclasseBGlobal ->exercice ||--}}
-{{--                                            $collectclasseBGlobal ->nomClasse != $collectclasseB->nomClasse )--}}
-{{--                                                @continue--}}
-{{--                                            @else--}}
-{{--                                                @foreach($collecttotalclassesBGlobal as $collecttotalclasseBGlobal)--}}
-{{--                                                    @if($collecttotalclasseB->exercice != $collecttotalclasseBGlobal->exercice)--}}
-{{--                                                        @continue--}}
-{{--                                                    @else--}}
-{{--                                                        @foreach($collectclassesB as $collectclasseBP)--}}
-{{--                                                            @if($collectclasseBP->exercice != (1 + $collectclasseB->exercice) ||--}}
-{{--                                                            $collectclasseBP->nomClasse != $collectclasseB->nomClasse)--}}
-{{--                                                                @continue--}}
-{{--                                                            @else--}}
-{{--                                                                <td style=" text-align: center;">{{ (int) $collectclasseB->total }}</td>--}}
-{{--                                                                <td style="text-align: center;color: #0000F0">--}}
-{{--                                                                    @if($collecttotalclasseB->total == 0)--}}
-{{--                                                                        {{ 0 }}--}}
-{{--                                                                    @else--}}
-{{--                                                                        {{ round(($collectclasseB->total / $collecttotalclasseB->total)*100,2)}}--}}
-{{--                                                                    @endif--}}
-{{--                                                                </td>--}}
-{{--                                                                <td style="background-color: #F3F3F3;text-align: center;">{{ (int) $collectclasseBGlobal->total }}</td>--}}
-{{--                                                                <td style="background-color: #F3F3F3;text-align: center;">--}}
-{{--                                                                    @if($collecttotalclasseBGlobal->total == 0)--}}
-{{--                                                                        {{ 0 }}--}}
-{{--                                                                    @else--}}
-{{--                                                                        {{ round(($collectclasseBGlobal->total / $collecttotalclasseBGlobal->total)*100,2 ) }}--}}
-{{--                                                                    @endif--}}
-{{--                                                                </td>--}}
-{{--                                                                <td style="background-color: #BCDAC5;text-align: center;">--}}
-{{--                                                                    @if($collectclasseBGlobal->total == 0)--}}
-{{--                                                                        {{ 0 }}--}}
-{{--                                                                    @else--}}
-{{--                                                                        {{ round(($collectclasseB->total / $collectclasseBGlobal->total )*100,2) }}--}}
-{{--                                                                    @endif--}}
-
-{{--                                                                </td>--}}
-{{--                                                                <td style="background-color: #BCDAC5;text-align: center;">--}}
-{{--                                                                    @if($collectclasseBGlobal->total == 0 || $collecttotalclasseB->total == 0 )--}}
-{{--                                                                        {{ 0 }}--}}
-{{--                                                                    @else--}}
-{{--                                                                        {{round( (($collectclasseB->total * $collecttotalclasseBGlobal->total ) / ($collectclasseBGlobal->total * $collecttotalclasseB->total ))*100,2) }}--}}
-{{--                                                                    @endif--}}
-{{--                                                                </td>--}}
-{{--                                                                <td style="background-color: #3f9ae5">{{ $collectclasseBP->total - $collectclasseB->total}}</td>--}}
-{{--                                                                <td style="background-color: #3f9ae5">--}}
-{{--                                                                    @if($collectclasseB->total != 0)--}}
-{{--                                                                        {{ round((($collectclasseBP->total - $collectclasseB->total) / $collectclasseB->total)*100,2) }}--}}
-{{--                                                                    @else--}}
-{{--                                                                        {{ 0 }}--}}
-{{--                                                                    @endif--}}
-{{--                                                                </td>--}}
-{{--                                                            @endif--}}
-{{--                                                        @endforeach--}}
-{{--                                                    @endif--}}
-{{--                                                @endforeach--}}
-{{--                                            @endif--}}
-{{--                                        @endforeach--}}
-{{--                                    @endif--}}
-{{--                                @endforeach--}}
-{{--                            @endif--}}
-{{--                        @endforeach--}}
-{{--                    @endif--}}
-{{--                @endforeach--}}
-{{--            </tr>--}}
-{{--        @endforeach--}}
-{{--        <tr style="font-size: 13px;text-align: center">--}}
-{{--            <th style="text-align: right;">--}}
-{{--                @foreach($collectclassesB as $collectclasseB)--}}
-{{--                    {{'TOTAL '. strtoupper($collectclasseB->nature)  }}--}}
-{{--                    @break;--}}
-{{--                @endforeach--}}
-{{--            </th>--}}
-{{--            @foreach($collecttotalclassesB as $collecttotalclasseB)--}}
-{{--                @foreach($collecttotalclassesBGlobal as $collecttotalclasseBGlobal)--}}
-{{--                    @if($collecttotalclasseBGlobal->exercice != $collecttotalclasseB ->exercice)--}}
-{{--                        @continue--}}
-{{--                    @else--}}
-{{--                        @for ($exo = $exercice1; $exo<=$exercice2; $exo++ )--}}
-{{--                            @if($collecttotalclasseBGlobal->exercice != $exo)--}}
-{{--                                @continue--}}
-{{--                            @else--}}
-{{--                                <th style="color: #20c997">--}}
-{{--                                    {{ (int) $collecttotalclasseB->total }}--}}
-{{--                                </th>--}}
-{{--                                <th style="color: #0000F0">{{100}}</th>--}}
-{{--                                <th style="background-color: #F3F3F3;text-align: center;">{{ (int) $collecttotalclasseBGlobal->total}}</th>--}}
-{{--                                <th style="background-color: #F3F3F3;text-align: center;">{{ 100 }}</th>--}}
-{{--                                <th style="background-color: #BCDAC5;text-align: center;">--}}
-{{--                                    @if($collecttotalclasseBGlobal->total != 0)--}}
-{{--                                        {{ round(($collecttotalclasseB->total / $collecttotalclasseBGlobal->total)*100, 2) }}--}}
-{{--                                    @else--}}
-{{--                                        {{ 0 }}--}}
-{{--                                    @endif--}}
-{{--                                </th>--}}
-{{--                                <th style="background-color: #BCDAC5;text-align: center;">{{ 1 }}</th>--}}
-{{--                                <th style="background-color: #3f9ae5;text-align: center;"></th>--}}
-{{--                                <th style="background-color: #3f9ae5;text-align: center;"></th>--}}
-{{--                            @endif--}}
-{{--                        @endfor--}}
-{{--                    @endif--}}
-{{--                @endforeach--}}
-{{--            @endforeach--}}
-{{--        </tr>--}}
         </tbody>
     </table>
+    </div>
+</div>
 @endif
 
