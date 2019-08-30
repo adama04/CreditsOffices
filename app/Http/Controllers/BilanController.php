@@ -84,7 +84,12 @@ class BilanController extends Controller
         $collectclassesA = $collectclassesB =
         $collecttotalclassesAGlobal = $collecttotalclassesBGlobal =
         $collecttotalclassesA = $collecttotalclassesB =
+            $collectclassesAUEMOA = $collectclassesBUEMOA =
+            $collecttotalclassesAUEMOA = $collecttotalclassesBUEMOA =
             collect();
+//        $this->validate($request, [
+//            'idEntreprise' => 'required'
+//        ]);
         $input = $request->all();
         //$document = $request->get('document');
         if ($request->get('exercice1') > $request->get('exercice2')){
@@ -95,17 +100,11 @@ class BilanController extends Controller
             $exercice1 = $request->get('exercice1');
             $exercice2 = $request->get('exercice2');
         }
-
+        $exercice01 = $exercice1;
+        $exercice02 = $exercice2;
         #########################################################################
        ################### La verification doit etre dynamique #################
       #########################################################################
-        if ($exercice1 > 2000):
-            $exercice1 -= 1;
-        endif;
-        if ($exercice2 < 2017):
-            $exercice2 += 1;
-        endif;
-
         $idE = explode('-',$request->get('idEntreprise'))[0];
         $dbs = $this->getDB($request);
         $idsousecteur = DB::connection($dbs)->table('ligneservices')
@@ -114,283 +113,220 @@ class BilanController extends Controller
         foreach ($idsousecteur as $item):
             $idsousecteur = $item->idsouSecteur;
         endforeach;
-
+        if ($request->get('naturep') == 'paran'):
+            if ($exercice1 > 2000):
+                $exercice1 -= 1;
+            endif;
+            for ($i = $exercice1; $i <= $exercice2; $i++):
+                $YEARS [] = $i;
+            endfor;
+        else:
+            $YEARS [] = $exercice01;
+            $YEARS [] = $exercice02;
+        endif;
         if ($request->get('document')=='bilan'):
+            $natureA = 'actif';
+            $natureB = 'passif';
+        else:
+            $natureA = 'charge';
+            $natureB = 'produit';
+        endif;
 
-            // Selectionner les classe a afficher en fonction des données recuperées apres post ddu formulaire
-                        ########## Actifs ###############
             $classesA = DB::connection($this->getDB($request))->table('classe')
-                ->where('nature','=','actif')
+                ->where('nature','=',$natureA)
                 ->orderBy('classe.idClasse','asc')
                 ->get('nomClasse');
             ########## Passifs ###############
             $classesB = DB::connection($this->getDB($request))->table('classe')
-                ->where('nature','=','passif')
+                ->where('nature','=',$natureB)
                 ->orderBy('classe.idClasse','asc')
                 ->get('nomClasse');
 
-            // En fonction de la classe recupéré la somme des rubriques dans lignebilan en passant par sous classe et rubrique
-            foreach ($classesA as $classeA):
-                // Recuperer pour chaque année d'exercice la somme des rubrique de chaque classe
-                for($i = $exercice1; $i <= $exercice2; $i++):
-                    // Global de chaque classe (somme rubrique) pour le secteur d'activité
-                    $SommeAGlobal = DB::connection($dbs)->table('classe')
-                        ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
-                        ->join('sousclasse','classe.idClasse','=','sousclasse.idClasse')
-                        ->join('rubrique','sousclasse.idSousclasse','=','rubrique.idSousclasse')
-                        ->join('lignebilan','rubrique.idRubrique','=','lignebilan.idRubrique')
-                        ->join('entreprises','lignebilan.idEntreprise','=','entreprises.idEntreprise')
-                        ->join('ligneservices','entreprises.idEntreprise','=','ligneservices.idEntreprise')
-                        ->where('exercice','=',$i)
-                        ->where('idsousecteur','=',$idsousecteur)
-                        ->where('nomClasse','=',$classeA->nomClasse)
-                        ->where('nature','=','actif')
-                        ->groupby('nomClasse','nature','exercice')
-                        ->get();
-                    $collectclassesAGlobal =$collectclassesAGlobal->concat($SommeAGlobal);
+                    // Selectionner les classe a afficher en fonction des données recuperées apres post ddu formulaire
+                                ########## Actifs ###############
+                    // En fonction de la classe recupéré la somme des rubriques dans lignebilan en passant par sous classe et rubrique
+                foreach ($classesA as $classeA):
+                    // Recuperer pour chaque année d'exercice la somme des rubrique de chaque classe
+                    for ($i=0; $i<count($YEARS); $i++):
+                        // Global de chaque classe (somme rubrique) pour le secteur d'activité
+                        $SommeAGlobal=DB::connection($dbs)->table('classe')
+                            ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
+                            ->join('sousclasse', 'classe.idClasse', '=', 'sousclasse.idClasse')
+                            ->join('rubrique', 'sousclasse.idSousclasse', '=', 'rubrique.idSousclasse')
+                            ->join('lignebilan', 'rubrique.idRubrique', '=', 'lignebilan.idRubrique')
+                            ->join('entreprises', 'lignebilan.idEntreprise', '=', 'entreprises.idEntreprise')
+                            ->join('ligneservices', 'entreprises.idEntreprise', '=', 'ligneservices.idEntreprise')
+                            ->where('exercice', '=', $YEARS[$i])
+                            ->where('idsousecteur', '=', $idsousecteur)
+                            ->where('nomClasse', '=', $classeA->nomClasse)
+                            ->where('nature', '=', $natureA)
+                            ->groupby('nomClasse', 'nature', 'exercice')
+                            ->get();
+                        $collectclassesAGlobal=$collectclassesAGlobal->concat($SommeAGlobal);
 
-                    // Global de chaque classe (somme rubrique) pour l'entreprise
-                    $SommeA = DB::connection($this->getDB($request))->table('classe')
-                        ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
-                        ->join('sousclasse','classe.idClasse','=','sousclasse.idClasse')
-                        ->join('rubrique','sousclasse.idSousclasse','=','rubrique.idSousclasse')
-                        ->join('lignebilan','rubrique.idRubrique','=','lignebilan.idRubrique')
-                        ->where('exercice','=',$i)
-                        ->where('lignebilan.idEntreprise' , '=' , $idE)
-                        ->where('classe.nomClasse','=',$classeA->nomClasse)
-                        ->where('nature','=','actif')
-                        ->groupby('nomClasse','nature','exercice')
-                        ->get();
-                    $collectclassesA =$collectclassesA->concat($SommeA);
+                        // Global de chaque classe (somme rubrique) pour l'entreprise
+                        $SommeA=DB::connection($this->getDB($request))->table('classe')
+                            ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
+                            ->join('sousclasse', 'classe.idClasse', '=', 'sousclasse.idClasse')
+                            ->join('rubrique', 'sousclasse.idSousclasse', '=', 'rubrique.idSousclasse')
+                            ->join('lignebilan', 'rubrique.idRubrique', '=', 'lignebilan.idRubrique')
+                            ->where('exercice', '=', $YEARS[$i])
+                            ->where('lignebilan.idEntreprise', '=', $idE)
+                            ->where('classe.nomClasse', '=', $classeA->nomClasse)
+                            ->where('nature', '=', $natureA)
+                            ->groupby('nomClasse', 'nature', 'exercice')
+                            ->get();
 
-                endfor;
-            endforeach;
+                        $collectclassesA=$collectclassesA->concat($SommeA);
+                        if($input['localite'] == 'uemoa'):
+
+                            $SommeAUEMOA=DB::connection('sensyyg2_umeoabd')->table('classe')
+                                ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
+                                ->join('sousclasse', 'classe.idClasse', '=', 'sousclasse.idClasse')
+                                ->join('rubrique', 'sousclasse.idSousclasse', '=', 'rubrique.idSousclasse')
+                                ->join('lignebilan', 'rubrique.idRubrique', '=', 'lignebilan.idRubrique')
+                                ->where('exercice', '=', $YEARS[$i])
+                                ->where('nomClasse', '=', $classeA->nomClasse)
+                                ->where('nature', '=', $natureA)
+                                ->groupby('nomClasse', 'nature', 'exercice')
+                                ->get();
+                            $collectclassesAUEMOA=$collectclassesAUEMOA->concat($SommeAUEMOA);
+                        endif;
+                    endfor;
+                endforeach;
             foreach ($classesB as $classeB):
                 // Recuperer pour chaque année d'exercice la somme des rubrique de chaque classe
-                for($i = $exercice1; $i <= $exercice2; $i++):
+                for ($i=0; $i<count($YEARS); $i++):
                     // Global de chaque classe (somme rubrique) pour le secteur d'activité
-                    $SommeBGlobal = DB::connection($dbs)->table('classe')
+                    $SommeBGlobal=DB::connection($dbs)->table('classe')
                         ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
-                        ->join('sousclasse','classe.idClasse','=','sousclasse.idClasse')
-                        ->join('rubrique','sousclasse.idSousclasse','=','rubrique.idSousclasse')
-                        ->join('lignebilan','rubrique.idRubrique','=','lignebilan.idRubrique')
-                        ->join('entreprises','lignebilan.idEntreprise','=','entreprises.idEntreprise')
-                        ->join('ligneservices','entreprises.idEntreprise','=','ligneservices.idEntreprise')
-                        ->where('exercice','=',$i)
-                        ->where('idsousecteur','=',$idsousecteur)
-                        ->where('nomClasse','=',$classeB->nomClasse)
-                        ->where('nature','=','passif')
-                        ->groupby('nomClasse','nature','exercice')
+                        ->join('sousclasse', 'classe.idClasse', '=', 'sousclasse.idClasse')
+                        ->join('rubrique', 'sousclasse.idSousclasse', '=', 'rubrique.idSousclasse')
+                        ->join('lignebilan', 'rubrique.idRubrique', '=', 'lignebilan.idRubrique')
+                        ->join('entreprises', 'lignebilan.idEntreprise', '=', 'entreprises.idEntreprise')
+                        ->join('ligneservices', 'entreprises.idEntreprise', '=', 'ligneservices.idEntreprise')
+                        ->where('exercice', '=', $YEARS[$i])
+                        ->where('idsousecteur', '=', $idsousecteur)
+                        ->where('nomClasse', '=', $classeB->nomClasse)
+                        ->where('nature', '=', $natureB)
+                        ->groupby('nomClasse', 'nature', 'exercice')
                         ->get();
-                    $collectclassesBGlobal =$collectclassesBGlobal->concat($SommeBGlobal);
+                    $collectclassesBGlobal=$collectclassesBGlobal->concat($SommeBGlobal);
 
                     // Global de chaque classe (somme rubrique) pour l'entreprise
-                    $SommeB = DB::connection($this->getDB($request))->table('classe')
+                    $SommeB=DB::connection($this->getDB($request))->table('classe')
                         ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
-                        ->join('sousclasse','classe.idClasse','=','sousclasse.idClasse')
-                        ->join('rubrique','sousclasse.idSousclasse','=','rubrique.idSousclasse')
-                        ->join('lignebilan','rubrique.idRubrique','=','lignebilan.idRubrique')
-                        ->where('exercice','=',$i)
-                        ->where('lignebilan.idEntreprise' , '=' , $idE)
-                        ->where('classe.nomClasse','=',$classeB->nomClasse)
-                        ->where('nature','=','passif')
-                        ->groupby('nomClasse','nature','exercice')
+                        ->join('sousclasse', 'classe.idClasse', '=', 'sousclasse.idClasse')
+                        ->join('rubrique', 'sousclasse.idSousclasse', '=', 'rubrique.idSousclasse')
+                        ->join('lignebilan', 'rubrique.idRubrique', '=', 'lignebilan.idRubrique')
+                        ->where('exercice', '=', $YEARS[$i])
+                        ->where('lignebilan.idEntreprise', '=', $idE)
+                        ->where('classe.nomClasse', '=', $classeB->nomClasse)
+                        ->where('nature', '=', $natureB)
+                        ->groupby('nomClasse', 'nature', 'exercice')
                         ->get();
-                    $collectclassesB =$collectclassesB->concat($SommeB);
+                    $collectclassesB=$collectclassesB->concat($SommeB);
 
+                    if($input['localite'] == 'uemoa'):
+                        $SommeBUEMOA=DB::connection('sensyyg2_umeoabd')->table('classe')
+                            ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
+                            ->join('sousclasse', 'classe.idClasse', '=', 'sousclasse.idClasse')
+                            ->join('rubrique', 'sousclasse.idSousclasse', '=', 'rubrique.idSousclasse')
+                            ->join('lignebilan', 'rubrique.idRubrique', '=', 'lignebilan.idRubrique')
+                            ->join('entreprises', 'lignebilan.idEntreprise', '=', 'entreprises.idEntreprise')
+                            ->join('ligneservices', 'entreprises.idEntreprise', '=', 'ligneservices.idEntreprise')
+                            ->where('exercice', '=', $YEARS[$i])
+                            ->where('idsousecteur', '=', $idsousecteur)
+                            ->where('nomClasse', '=', $classeB->nomClasse)
+                            ->where('nature', '=', $natureB)
+                            ->groupby('nomClasse', 'nature', 'exercice')
+                            ->get();
+                        $collectclassesBUEMOA=$collectclassesBUEMOA->concat($SommeBUEMOA);
+                    endif;
                 endfor;
             endforeach;
-            // Total Actif, GlobalActif, Passifs et GlobalPassif si Bilan choisi
-            for($i = $exercice1; $i <= $exercice2; $i++):
-                $totalclassesA = DB::connection($dbs)->table('classe')
-                    ->selectRaw('exercice,SUM(lignebilan.brut) as total')
-                    ->join('sousclasse' , 'classe.idClasse' , '=' , 'sousclasse.idClasse')
-                    ->join('rubrique' , 'sousclasse.idSousclasse' , '=' , 'rubrique.idSousclasse')
-                    ->join('lignebilan' , 'rubrique.idRubrique' , '=' , 'lignebilan.idRubrique')
-                    ->where('nature' , '=' , 'actif')
-                    ->where('exercice' , '=' , $i)
-                    ->where('lignebilan.idEntreprise' , '=' , $idE)
-                    ->groupBy('exercice')
-                    ->get();
-                $totalclassesAGlobal = DB::connection($dbs)->table('classe')
-                    ->selectRaw('exercice,SUM(lignebilan.brut) as total')
-                    ->join('sousclasse' , 'classe.idClasse' , '=' , 'sousclasse.idClasse')
-                    ->join('rubrique' , 'sousclasse.idSousclasse' , '=' , 'rubrique.idSousclasse')
-                    ->join('lignebilan' , 'rubrique.idRubrique' , '=' , 'lignebilan.idRubrique')
-                    ->join('entreprises','lignebilan.idEntreprise','=','entreprises.idEntreprise')
-                    ->join('ligneservices','entreprises.idEntreprise','=','ligneservices.idEntreprise')
-                    ->where('exercice','=',$i)
-                    ->where('idsousecteur','=',$idsousecteur)
-                    ->where('nature','=','actif')
-                    ->groupBy('exercice')
-                    ->get();
-                $totalclassesB = DB::connection($dbs)->table('classe')
-                    ->selectRaw('exercice,SUM(lignebilan.brut) as total')
-                    ->join('sousclasse' , 'classe.idClasse' , '=' , 'sousclasse.idClasse')
-                    ->join('rubrique' , 'sousclasse.idSousclasse' , '=' , 'rubrique.idSousclasse')
-                    ->join('lignebilan' , 'rubrique.idRubrique' , '=' , 'lignebilan.idRubrique')
-                    ->where('nature' , '=' , 'passif')
-                    ->where('exercice' , '=' , $i)
-                    ->where('lignebilan.idEntreprise' , '=' , $idE)
-                    ->groupBy('exercice')
-                    ->get();
-                $totalclassesBGlobal = DB::connection($dbs)->table('classe')
-                    ->selectRaw('exercice,SUM(lignebilan.brut) as total')
-                    ->join('sousclasse' , 'classe.idClasse' , '=' , 'sousclasse.idClasse')
-                    ->join('rubrique' , 'sousclasse.idSousclasse' , '=' , 'rubrique.idSousclasse')
-                    ->join('lignebilan' , 'rubrique.idRubrique' , '=' , 'lignebilan.idRubrique')
-                    ->join('entreprises','lignebilan.idEntreprise','=','entreprises.idEntreprise')
-                    ->join('ligneservices','entreprises.idEntreprise','=','ligneservices.idEntreprise')
-                    ->where('exercice','=',$i)
-                    ->where('idsousecteur','=',$idsousecteur)
-                    ->where('nature','=','passif')
-                    ->groupBy('exercice')
-                    ->get();
-                // Concataine collection to return resBilan blade
-                $collecttotalclassesA = $collecttotalclassesA->concat($totalclassesA);
-                $collecttotalclassesB = $collecttotalclassesB->concat($totalclassesB);
-                $collecttotalclassesAGlobal = $collecttotalclassesAGlobal->concat($totalclassesAGlobal);
-                $collecttotalclassesBGlobal = $collecttotalclassesBGlobal->concat($totalclassesBGlobal);
-            endfor;
-        endif;
-        if ($request->get('document')=='compres'):
-            // Selectionner les classe a afficher en fonction des données recuperées apres post ddu formulaire
-            ########## Actifs ###############
-            $classesA = DB::connection($this->getDB($request))->table('classe')
-                ->where('nature','=','charge')
-                ->orderBy('classe.idClasse','asc')
-                ->get('nomClasse');
-            ########## Passifs ###############
-            $classesB = DB::connection($this->getDB($request))->table('classe')
-                ->where('nature','=','produit')
-                ->orderBy('classe.idClasse','asc')
-                ->get('nomClasse');
+                    for ($i=0; $i<count($YEARS); $i++):
+                        $totalclassesA = DB::connection($dbs)->table('classe')
+                            ->selectRaw('exercice,SUM(lignebilan.brut) as total')
+                            ->join('sousclasse' , 'classe.idClasse' , '=' , 'sousclasse.idClasse')
+                            ->join('rubrique' , 'sousclasse.idSousclasse' , '=' , 'rubrique.idSousclasse')
+                            ->join('lignebilan' , 'rubrique.idRubrique' , '=' , 'lignebilan.idRubrique')
+                            ->where('nature' , '=' , $natureA)
+                            ->where('exercice' , '=' , $YEARS[$i])
+                            ->where('lignebilan.idEntreprise' , '=' , $idE)
+                            ->groupBy('exercice')
+                            ->get();
+                        $totalclassesAGlobal = DB::connection($dbs)->table('classe')
+                            ->selectRaw('exercice,SUM(lignebilan.brut) as total')
+                            ->join('sousclasse' , 'classe.idClasse' , '=' , 'sousclasse.idClasse')
+                            ->join('rubrique' , 'sousclasse.idSousclasse' , '=' , 'rubrique.idSousclasse')
+                            ->join('lignebilan' , 'rubrique.idRubrique' , '=' , 'lignebilan.idRubrique')
+                            ->join('entreprises','lignebilan.idEntreprise','=','entreprises.idEntreprise')
+                            ->join('ligneservices','entreprises.idEntreprise','=','ligneservices.idEntreprise')
+                            ->where('exercice','=',$YEARS[$i])
+                            ->where('idsousecteur','=',$idsousecteur)
+                            ->where('nature','=',$natureA)
+                            ->groupBy('exercice')
+                            ->get();
+                        if($input['localite'] == 'uemoa'):
+                            $totalclassesAUEMOA = DB::connection('sensyyg2_umeoabd')->table('classe')
+                                ->selectRaw('exercice,SUM(lignebilan.brut) as total')
+                                ->join('sousclasse' , 'classe.idClasse' , '=' , 'sousclasse.idClasse')
+                                ->join('rubrique' , 'sousclasse.idSousclasse' , '=' , 'rubrique.idSousclasse')
+                                ->join('lignebilan' , 'rubrique.idRubrique' , '=' , 'lignebilan.idRubrique')
+                                ->where('exercice','=',$YEARS[$i])
+                                ->where('nature','=',$natureA)
+                                ->groupBy('exercice')
+                                ->get();
 
-            // En fonction de la classe recupéré la somme des rubriques dans lignebilan en passant par sous classe et rubrique
-            foreach ($classesA as $classeA):
-                // Recuperer pour chaque année d'exercice la somme des rubrique de chaque classe
-                for($i = $exercice1; $i <= $exercice2; $i++):
-                    // Global de chaque classe (somme rubrique) pour le secteur d'activité
-                    $SommeAGlobal = DB::connection($dbs)->table('classe')
-                        ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
-                        ->join('sousclasse','classe.idClasse','=','sousclasse.idClasse')
-                        ->join('rubrique','sousclasse.idSousclasse','=','rubrique.idSousclasse')
-                        ->join('lignebilan','rubrique.idRubrique','=','lignebilan.idRubrique')
-                        ->join('entreprises','lignebilan.idEntreprise','=','entreprises.idEntreprise')
-                        ->join('ligneservices','entreprises.idEntreprise','=','ligneservices.idEntreprise')
-                        ->where('exercice','=',$i)
-                        ->where('idsousecteur','=',$idsousecteur)
-                        ->where('nomClasse','=',$classeA->nomClasse)
-                        ->where('nature','=','charge')
-                        ->groupby('nomClasse','nature','exercice')
-                        ->get();
-                    $collectclassesAGlobal =$collectclassesAGlobal->concat($SommeAGlobal);
+                            $totalclassesBUEMOA = DB::connection('sensyyg2_umeoabd')->table('classe')
+                                ->selectRaw('exercice,SUM(lignebilan.brut) as total')
+                                ->join('sousclasse' , 'classe.idClasse' , '=' , 'sousclasse.idClasse')
+                                ->join('rubrique' , 'sousclasse.idSousclasse' , '=' , 'rubrique.idSousclasse')
+                                ->join('lignebilan' , 'rubrique.idRubrique' , '=' , 'lignebilan.idRubrique')
+                                ->join('entreprises','lignebilan.idEntreprise','=','entreprises.idEntreprise')
+                                ->join('ligneservices','entreprises.idEntreprise','=','ligneservices.idEntreprise')
+                                ->where('exercice','=',$YEARS[$i])
+                                ->where('idsousecteur','=',$idsousecteur)
+                                ->where('nature','=',$natureB)
+                                ->groupBy('exercice')
+                                ->get();
 
-                    // Global de chaque classe (somme rubrique) pour l'entreprise
-                    $SommeA = DB::connection($this->getDB($request))->table('classe')
-                        ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
-                        ->join('sousclasse','classe.idClasse','=','sousclasse.idClasse')
-                        ->join('rubrique','sousclasse.idSousclasse','=','rubrique.idSousclasse')
-                        ->join('lignebilan','rubrique.idRubrique','=','lignebilan.idRubrique')
-                        ->where('exercice','=',$i)
-                        ->where('lignebilan.idEntreprise' , '=' , $idE)
-                        ->where('classe.nomClasse','=',$classeA->nomClasse)
-                        ->where('nature','=','charge')
-                        ->groupby('nomClasse','nature','exercice')
-                        ->get();
-                    $collectclassesA =$collectclassesA->concat($SommeA);
+                            $collecttotalclassesAUEMOA = $collecttotalclassesAUEMOA->concat($totalclassesAUEMOA);
+                            $collecttotalclassesBUEMOA = $collecttotalclassesBUEMOA->concat($totalclassesBUEMOA);
+                            endif;
 
-                endfor;
-            endforeach;
-            foreach ($classesB as $classeB):
-                // Recuperer pour chaque année d'exercice la somme des rubrique de chaque classe
-                for($i = $exercice1; $i <= $exercice2; $i++):
-                    // Global de chaque classe (somme rubrique) pour le secteur d'activité
-                    $SommeBGlobal = DB::connection($dbs)->table('classe')
-                        ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
-                        ->join('sousclasse','classe.idClasse','=','sousclasse.idClasse')
-                        ->join('rubrique','sousclasse.idSousclasse','=','rubrique.idSousclasse')
-                        ->join('lignebilan','rubrique.idRubrique','=','lignebilan.idRubrique')
-                        ->join('entreprises','lignebilan.idEntreprise','=','entreprises.idEntreprise')
-                        ->join('ligneservices','entreprises.idEntreprise','=','ligneservices.idEntreprise')
-                        ->where('exercice','=',$i)
-                        ->where('idsousecteur','=',$idsousecteur)
-                        ->where('nomClasse','=',$classeB->nomClasse)
-                        ->where('nature','=','produit')
-                        ->groupby('nomClasse','nature','exercice')
-                        ->get();
-                    $collectclassesBGlobal =$collectclassesBGlobal->concat($SommeBGlobal);
+                            $totalclassesB = DB::connection($dbs)->table('classe')
+                            ->selectRaw('exercice,SUM(lignebilan.brut) as total')
+                            ->join('sousclasse' , 'classe.idClasse' , '=' , 'sousclasse.idClasse')
+                            ->join('rubrique' , 'sousclasse.idSousclasse' , '=' , 'rubrique.idSousclasse')
+                            ->join('lignebilan' , 'rubrique.idRubrique' , '=' , 'lignebilan.idRubrique')
+                            ->where('nature' , '=' , $natureB)
+                            ->where('exercice' , '=' , $YEARS[$i])
+                            ->where('lignebilan.idEntreprise' , '=' , $idE)
+                            ->groupBy('exercice')
+                            ->get();
+                        $totalclassesBGlobal = DB::connection($dbs)->table('classe')
+                            ->selectRaw('exercice,SUM(lignebilan.brut) as total')
+                            ->join('sousclasse' , 'classe.idClasse' , '=' , 'sousclasse.idClasse')
+                            ->join('rubrique' , 'sousclasse.idSousclasse' , '=' , 'rubrique.idSousclasse')
+                            ->join('lignebilan' , 'rubrique.idRubrique' , '=' , 'lignebilan.idRubrique')
+                            ->join('entreprises','lignebilan.idEntreprise','=','entreprises.idEntreprise')
+                            ->join('ligneservices','entreprises.idEntreprise','=','ligneservices.idEntreprise')
+                            ->where('exercice','=',$YEARS[$i])
+                            ->where('idsousecteur','=',$idsousecteur)
+                            ->where('nature','=',$natureB)
+                            ->groupBy('exercice')
+                            ->get();
 
-                    // Global de chaque classe (somme rubrique) pour l'entreprise
-                    $SommeB = DB::connection($this->getDB($request))->table('classe')
-                        ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
-                        ->join('sousclasse','classe.idClasse','=','sousclasse.idClasse')
-                        ->join('rubrique','sousclasse.idSousclasse','=','rubrique.idSousclasse')
-                        ->join('lignebilan','rubrique.idRubrique','=','lignebilan.idRubrique')
-                        ->where('exercice','=',$i)
-                        ->where('lignebilan.idEntreprise' , '=' , $idE)
-                        ->where('classe.nomClasse','=',$classeB->nomClasse)
-                        ->where('nature','=','produit')
-                        ->groupby('nomClasse','nature','exercice')
-                        ->get();
-                    $collectclassesB =$collectclassesB->concat($SommeB);
 
-                endfor;
-            endforeach;
-            // Total Actif, GlobalActif, Passifs et GlobalPassif si Bilan choisi
-            for($i = $exercice1; $i <= $exercice2; $i++):
-                $totalclassesA = DB::connection($dbs)->table('classe')
-                    ->selectRaw('exercice,SUM(lignebilan.brut) as total')
-                    ->join('sousclasse' , 'classe.idClasse' , '=' , 'sousclasse.idClasse')
-                    ->join('rubrique' , 'sousclasse.idSousclasse' , '=' , 'rubrique.idSousclasse')
-                    ->join('lignebilan' , 'rubrique.idRubrique' , '=' , 'lignebilan.idRubrique')
-                    ->where('nature' , '=' , 'charge')
-                    ->where('exercice' , '=' , $i)
-                    ->where('lignebilan.idEntreprise' , '=' , $idE)
-                    ->groupBy('exercice')
-                    ->get();
-                $totalclassesAGlobal = DB::connection($dbs)->table('classe')
-                    ->selectRaw('exercice,SUM(lignebilan.brut) as total')
-                    ->join('sousclasse' , 'classe.idClasse' , '=' , 'sousclasse.idClasse')
-                    ->join('rubrique' , 'sousclasse.idSousclasse' , '=' , 'rubrique.idSousclasse')
-                    ->join('lignebilan' , 'rubrique.idRubrique' , '=' , 'lignebilan.idRubrique')
-                    ->join('entreprises','lignebilan.idEntreprise','=','entreprises.idEntreprise')
-                    ->join('ligneservices','entreprises.idEntreprise','=','ligneservices.idEntreprise')
-                    ->where('exercice','=',$i)
-                    ->where('idsousecteur','=',$idsousecteur)
-                    ->where('nature','=','charge')
-                    ->groupBy('exercice')
-                    ->get();
-                $totalclassesB = DB::connection($dbs)->table('classe')
-                    ->selectRaw('exercice,SUM(lignebilan.brut) as total')
-                    ->join('sousclasse' , 'classe.idClasse' , '=' , 'sousclasse.idClasse')
-                    ->join('rubrique' , 'sousclasse.idSousclasse' , '=' , 'rubrique.idSousclasse')
-                    ->join('lignebilan' , 'rubrique.idRubrique' , '=' , 'lignebilan.idRubrique')
-                    ->where('nature' , '=' , 'produit')
-                    ->where('exercice' , '=' , $i)
-                    ->where('lignebilan.idEntreprise' , '=' , $idE)
-                    ->groupBy('exercice')
-                    ->get();
-                $totalclassesBGlobal = DB::connection($dbs)->table('classe')
-                    ->selectRaw('exercice,SUM(lignebilan.brut) as total')
-                    ->join('sousclasse' , 'classe.idClasse' , '=' , 'sousclasse.idClasse')
-                    ->join('rubrique' , 'sousclasse.idSousclasse' , '=' , 'rubrique.idSousclasse')
-                    ->join('lignebilan' , 'rubrique.idRubrique' , '=' , 'lignebilan.idRubrique')
-                    ->join('entreprises','lignebilan.idEntreprise','=','entreprises.idEntreprise')
-                    ->join('ligneservices','entreprises.idEntreprise','=','ligneservices.idEntreprise')
-                    ->where('exercice','=',$i)
-                    ->where('idsousecteur','=',$idsousecteur)
-                    ->where('nature','=','produit')
-                    ->groupBy('exercice')
-                    ->get();
-                // Concataine collection to return resBilan blade
-                $collecttotalclassesA = $collecttotalclassesA->concat($totalclassesA);
-                $collecttotalclassesB = $collecttotalclassesB->concat($totalclassesB);
-                $collecttotalclassesAGlobal = $collecttotalclassesAGlobal->concat($totalclassesAGlobal);
-                $collecttotalclassesBGlobal = $collecttotalclassesBGlobal->concat($totalclassesBGlobal);
-            endfor;
-        endif;
-        $nomEntreprise=explode("-",$input['idEntreprise'])[1];
+                        $collecttotalclassesA = $collecttotalclassesA->concat($totalclassesA);
+                        $collecttotalclassesAGlobal = $collecttotalclassesAGlobal->concat($totalclassesAGlobal);
+                        $collecttotalclassesB = $collecttotalclassesB->concat($totalclassesB);
+                        $collecttotalclassesBGlobal = $collecttotalclassesBGlobal->concat($totalclassesBGlobal);
+
+                    endfor;
+        $nomEntreprise=explode("-",$input['idEntreprise'])[0];
         $infoEntreprises = DB::connection($dbs)->table('entreprises')
             ->join('ligneservices', 'entreprises.idEntreprise', '=', 'ligneservices.idEntreprise')
             ->join('service', 'ligneservices.idService', '=', 'service.idService')
@@ -399,27 +335,52 @@ class BilanController extends Controller
             ->select('sousecteur.idsouSecteur', 'secteur.idSecteur', 'service.idService', 'entreprises.numRegistre', 'entreprises.nomEntreprise',
                 'entreprises.idEntreprise', 'entreprises.Adresse', 'entreprises.Sigle', 'entreprises.codePays', 'entreprises.codeRegion',
                 'entreprises.Pays', 'entreprises.type', 'entreprises.dateCreation', 'entreprises.numEnregistre', 'sousecteur.nomsouSecteur', 'service.nomService',
-                'secteur.nomSecteur')->where('nomEntreprise','=',$nomEntreprise)
+                'secteur.nomSecteur')->where('entreprises.idEntreprise','=',$nomEntreprise)
             ->get();
-        $exercices = DB::connection($dbs)->table('lignebilan')
-            ->where('exercice','>=',$exercice1)
-            ->where('exercice','<=',$exercice2)
-            ->groupBy('exercice')
-            ->get('exercice');
-        return view('pages.resBilan')
-            ->with('input',$input)
-            ->with('collectclassesA',$collectclassesA)
-            ->with('collectclassesB',$collectclassesB)
-            ->with('collectclassesAGlobal',$collectclassesAGlobal)
-            ->with('collectclassesBGlobal',$collectclassesBGlobal)
-            ->with('collecttotalclassesA',$collecttotalclassesA)
-            ->with('collecttotalclassesB',$collecttotalclassesB)
-            ->with('collecttotalclassesAGlobal',$collecttotalclassesAGlobal)
-            ->with('collecttotalclassesBGlobal',$collecttotalclassesBGlobal)
-            ->with('classesA',$classesA)
-            ->with('classesB',$classesB)
-            ->with('exercices',$exercices)
-            ->with('infoEntreprises',$infoEntreprises);
+        if ($request->get('naturep') == 'paran'):
+            $exercices = DB::connection($dbs)->table('lignebilan')
+                ->where('exercice','>=',$exercice01)
+                ->where('exercice','<=',$exercice02)
+                ->groupBy('exercice')
+                ->get('exercice');
+        else:
+            $exercices = DB::connection($dbs)->table('lignebilan')
+                ->where('exercice','=',$exercice01)
+                ->orwhere('exercice','=',$exercice02)
+                ->groupBy('exercice')
+                ->get('exercice');
+        endif;
+        $view = view('pages.resBilan');
+        $view->input = $input;
+        $view->collectclassesA = $collectclassesA;
+        $view->collectclassesAGlobal = $collectclassesAGlobal;
+        $view->collecttotalclassesA = $collecttotalclassesA;
+        $view->collecttotalclassesAGlobal = $collecttotalclassesAGlobal;
+        $view->classesA = $classesA;
+        $view->exercices = $exercices;
+        $view->infoEntreprises = $infoEntreprises;
+        $view->collectclassesB = $collectclassesB;
+        $view->collectclassesBGlobal = $collectclassesBGlobal;
+        $view->collecttotalclassesB = $collecttotalclassesB;
+        $view->collecttotalclassesBGlobal = $collecttotalclassesBGlobal;
+        $view->classesB = $classesB;
+        if($input['localite'] == 'uemoa'):
+            $view->collecttotalclassesAUEMOA = $collecttotalclassesAUEMOA;
+            $view->collecttotalclassesBUEMOA = $collecttotalclassesBUEMOA;
+            $view->collectclassesAUEMOA = $collectclassesAUEMOA;
+             $view->collectclassesBUEMOA = $collectclassesBUEMOA;
+        endif;
+        return $view;
+//        return view('pages.resBilan',compact(
+//            'input','collectclassesA',
+//            'collectclassesAGlobal', 'collecttotalclassesA',
+//            'collecttotalclassesAGlobal', 'classesA',
+//            'exercices', 'infoEntreprises',
+//            'collectclassesB',
+//            'collectclassesBGlobal', 'collecttotalclassesB',
+//            'collecttotalclassesBGlobal', 'classesB'
+//        ));
+
     }
     public function export()
     {

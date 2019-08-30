@@ -268,10 +268,21 @@
                 </div>
             </div>
             <div class="card-body">
+{{--                @if(count($errors) > 0)--}}
+{{--                    <div class="alert alert-danger">--}}
+{{--                        Validation du Formulaire<br><br>--}}
+{{--                        <ul>--}}
+{{--                            @foreach($errors->all() as $error)--}}
+{{--                                <li>{{ $error }}</li>--}}
+{{--                            @endforeach--}}
+{{--                        </ul>--}}
+{{--                    </div>--}}
+{{--                @endif--}}
                 <form action="{{url('/bilan?pays='.$pays)}}" method="post" target="index">
                     @csrf
                     <div class="form-group row">
                         <div class="col">
+
                             <label for="" style="font-size:medium;color: #0355AF;
                             font-weight: bold;font-family: 'Times New Roman, Times, serif'">
                                 <strong>
@@ -370,9 +381,19 @@
                             <label for=""><input type="radio" name="document" value="compres">&nbsp;Compte Resultat</label>
                         </div>
                         <div class="col"  style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
-                            <label for=""><input type="radio" name="localite" value="sensyyg2_senegalbd" checked>SENEGAL</label>
-                            <label for=""><input type="radio" name="localite" value="sensyyg2_umeoabd1">&nbsp; GROUPE</label>
-                            <label for=""> <input type="radio" name="localite" value="sensyyg2_umeoabd">&nbsp; UMEOA</label>
+                            <label for=""><input type="radio" name="localite" value="pays" checked>
+                                @if($pays == 24) {{'BENIN'}}  @endif
+                                @if($pays == 34) {{'BURKINA'}}    @endif
+                                @if($pays == 48) {{'COTE D\'IVOIR'}}  @endif
+                                @if($pays == 81) {{'GUINNE BISSAU'}}    @endif
+                                @if($pays == 134) {{'MALI'}}  @endif
+                                @if($pays == 154) {{'NIGER'}}    @endif
+                                @if($pays == 201) {{'SENEGAL'}}  @endif
+                                @if($pays == 223) {{'TOGO'}}    @endif
+
+                            </label>
+                            <label for=""><input type="radio" name="localite" value="group">&nbsp; GROUPE</label>
+                            <label for=""> <input type="radio" name="localite" value="uemoa">&nbsp; UMEOA</label>
                     </div>
                         <div class="col">
                             <button type="submit" class="btn btn-primary" name="ajouter" style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
@@ -390,6 +411,7 @@
 <div class="#">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+</div>
 </div>
 </body>
 </html>
