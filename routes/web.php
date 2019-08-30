@@ -13,11 +13,10 @@
 Route::get('/', function () {
     return view('welcome');
 });
-
 Route::get('/bilan/{pays?}', 'BilanController@index');
 Route::post('/bilan', 'BilanController@bilan');
 //Route::get('/bilan', 'BilanController@index')->name('billan');
-
 Route::get('autocomplete/{pays?}', 'BilanController@listeEntreprises')->name('autocomplete');
-Route::get('/export', 'BilanController@export')->name('export');
+Route::post('/export', 'BilanController@export')->name('export');
 Route::post('/import', 'BilanController@import')->name('import');
+Route::post('/export_pdf', 'BilanController@export_pdf')->name('export_pdf');

@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Africa B.I.C - @yield('title')</title>
-
     <link rel="icon" type="image/png" href="{{asset('images/Senegal.ico')}}" />
     <!-- Bootstrap -->
     <link href="//netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/css/bootstrap-combined.no-icons.min.css" rel="stylesheet">
@@ -14,19 +13,19 @@
     <link rel="stylesheet" href="{{asset('css/all.min.css')}}">
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
     <link rel="stylesheet" href="{{asset('css/style.css')}}">
-
+    <link rel="stylesheet" href="{{asset('css/bootstrap.css')}}">
+    <link rel="stylesheet" href="{{asset('css/bootstrap.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/mdb.css')}}">
+    <link rel="stylesheet" href="{{asset('css/mdb.min.css')}}">
+    <link rel="stylesheet" href="{{asset('css/mdb.lite.css')}}">
+    <link rel="stylesheet" href="{{asset('css/mdb.lite.min.css')}}">
     <script type="text/javascript" src="{{ asset('js/jquery.min.js')}}"></script>
     <script src="{{url('http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.js')}}"></script>
     <script src="{{url('https://oss.maxcdn.com/libs/html5shiv/3.7.2/html5shiv.js')}}"></script>
     <script src="{{url('https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js')}}"></script>
-
     <script src="{{url('https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js')}}"></script>
-
-
 </head>
-
 <body>
-
 <div class="header">
 
     <div id="nav">  <!-- début menu -->
@@ -394,10 +393,10 @@
                             </label>
                             <label for=""><input type="radio" name="localite" value="group">&nbsp; GROUPE</label>
                             <label for=""> <input type="radio" name="localite" value="uemoa">&nbsp; UMEOA</label>
-                    </div>
                         <div class="col">
                             <button type="submit" class="btn btn-primary" name="ajouter" style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
                                 <i class="icon-ok "></i>Trouver</button>
+                            </div>
                         </div>
                     </div>
                 </form>
@@ -411,6 +410,17 @@
 <div class="#">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <!-- Footer -->
+    <footer class="page-footer font-smaller blue ">
+
+        <!-- Copyright -->
+        <div class="footer-copyright text-center py-4" style="font-family: 'Times New Roman';font-size: large">© 2019 Copyright:
+            <a href="https://mdbootstrap.com/education/bootstrap/">Analyse Financière</a>
+        </div>
+        <!-- Copyright -->
+
+    </footer>
+    <!-- Footer -->
 </div>
 </div>
 </body>

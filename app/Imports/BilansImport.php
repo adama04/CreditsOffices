@@ -3,6 +3,7 @@
 namespace App\Imports;
 use App\Models\Classe;
 use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Concerns\WithHeadingRow;
 
 class BilansImport implements ToModel
 {
@@ -16,4 +17,9 @@ class BilansImport implements ToModel
             'code'=> $row[4],
         ]);
     }
+   /* public function headingRow(): int
+    {
+        return 5;
+    }*/
+
 }
