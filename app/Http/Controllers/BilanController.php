@@ -10,12 +10,13 @@ use App\Models\Rubrique;
 use App\Models\LigneBilan;
 use App\Models\Pays;
 use App\Exports\BilansExport;
-use Barryvdh\DomPDF\Facade as PDF;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\View\View;
 use Maatwebsite\Excel\Facades\Excel;
-use phpDocumentor\Reflection\Types\Null_;
+use PhpOffice\PhpSpreadsheet\Reader;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class BilanController extends Controller
 {
@@ -46,7 +47,6 @@ class BilanController extends Controller
     {
         $dbs = $this->getDB($request);
         $entreprises = DB::connection($dbs)->table('entreprises')
-
             ->where('nomEntreprise', 'LIKE', "%{$request->input('query')}%")
             ->orWhere('Sigle', 'LIKE', "%{strtoupper($request->input('query'))}%")
             ->get(['nomEntreprise', 'idEntreprise']);
@@ -756,12 +756,103 @@ class BilanController extends Controller
             $collecttotalclassesA,$collecttotalclassesB,$collecttotalclassesAGlobal,$collecttotalclassesBGlobal,
             $classesA,$classesB,$exercices,$infoEntreprises), 'bilans.xlsx',\Maatwebsite\Excel\Excel::XLSX);
     }
-    public function import()
+    public function import(Request $request)
     {
-        Excel::import(new BilansImport, request()->file('file'));
-        return back();
+        $dbs=$this->getDB($request);
+        $this->validate($request, [
+            'select_file' => 'required|mimes:xls,xlsx'
+        ]);
+        $rubriques = DB::connection($dbs)->table('rubrique')
+            ->get(['idRubrique','nomRubrique','idSousclasse']);
+        $souclasses = DB::connection($dbs)->table('sousclasse')
+            ->get(['idSousclasse','nomSousclasse','idClasse']);
+        $classes = DB::connection($dbs)->table('classe')
+            ->get(['idClasse','nomClasse','nature']);
+        /*->join('classe as c2','c1.idClasse','c2.idClasse')
+            ->where('c1.nomClasse','!=','c2.nomClasse')
+            ->where('c1.nature','!=','c2.nature')*/
+          $classes1 = DB::connection($dbs)->table('classe')
+            ->get(['idClasse','nomClasse','nature']);
+      /*foreach ($classes as $classe):
+            echo $classe->nomClasse;
+        endforeach;*/
+        $extension = $request->select_file->extension();
+        $path = $request->select_file->storeAs(date('Y'),'upload'.time().'.'.$extension);
+        $path = Storage::disk('local')->path($path);
+        $reader = new Xlsx();
+        $data = array();
+        $spreadsheet = $reader->load($path);
+        $entreprise=$spreadsheet->getSheet(0)
+            ->getCellByColumnAndRow(1,3)->getValue();
+        $identreprises=DB::connection($dbs)->table('entreprises')
+            ->where('nomEntreprise','=',$entreprise)
+        ->get('idEntreprise');
+        foreach ($identreprises as $identreprise):
+          // echo $identreprise->idEntreprise;
+        endforeach;
+        $rows  = $spreadsheet->getActiveSheet()->getHighestRow();
+        /*$highestColumn = $spreadsheet->getActiveSheet()->getHighestColumn();
+        $highestColumnIndex = \PhpOffice\PhpSpreadsheet\Cell\Coordinate::columnIndexFromString($highestColumn);
+        dd($highestColumnIndex);*/
+        for ($year = 2; $year <3; $year++):
+            foreach ($classes as $classe):
+                for ($row0 = 6; $row0 <=$rows ; $row0++):
+                    if (htmlentities($classe->nomClasse)!= htmlentities($spreadsheet->getSheet(0)
+                            ->getCellByColumnAndRow(1,$row0)->getValue())):
+                        continue;
+                    else:
+                        foreach ($souclasses as $souclasse):
+                            if ($souclasse->idClasse != $classe->idClasse):
+                                continue;
+                            else:
+                                for ($row = $row0; $row <=$rows; $row++):
+                                    if (htmlentities($souclasse->nomSousclasse) != htmlentities($spreadsheet->getSheet(0)
+                                            ->getCellByColumnAndRow(1,$row)->getValue())):
+                                        continue;
+                                    else:
+                                        foreach ($rubriques as $rubrique):
+                                            if ($rubrique->idSousclasse != $souclasse->idSousclasse):
+                                                continue;
+                                            else:
+                                                for($row1 = $row; $row1 <=$rows; $row1++):
+                                                    if (htmlentities($rubrique->nomRubrique) != htmlentities($spreadsheet->getSheet(0)
+                                                                ->getCellByColumnAndRow(1,$row1)->getValue())):
+                                                        continue;
+                                                    else:
+                                                        $data [] = [
+                                                            'nomEntreprise'=>$spreadsheet->getSheet(0)
+                                                                ->getCellByColumnAndRow(1, $row1)->getValue(),
+                                                            'idRubrique' => $rubrique->idRubrique,
+                                                            'idEntreprise' => $identreprise->idEntreprise,
+                                                            'exercice' => $spreadsheet->getSheet(0)
+                                                                ->getCellByColumnAndRow($year, 5)->getValue(),
+                                                            'brut' => $spreadsheet->getSheet(0)
+                                                                ->getCellByColumnAndRow(2, $row1)->getValue(),
+                                                            'provision' => 0
+                                                        ];
+                                                    endif;
+                                                    break;
+                                                endfor;
+                                            endif;
+                                        endforeach;
+                                    endif;
+                                    break;
+                                endfor;
+                            endif;
+                        endforeach;
+                    endif;
+                    continue;
+                endfor;
+            endforeach;
+        endfor;
+        dd($data);
+        if (!empty($data)):
+            DB::connection($dbs)->table('lignebilan')->insert($data);
+            return back()->with('success', 'Les données ont été importées avec succès');
+        else:
+            return back()->with('failled', 'Excel Data Imported failed.');
+        endif;
     }
-
     /**
      * @return mixed
      */
@@ -806,7 +897,7 @@ class BilanController extends Controller
 
        if ($request->get('document')=='bilan'):
 
-           // Selectionner les classe a afficher en fonction des données recuperées apres post ddu formulaire
+           // Selectionner les classe a afficher en fonction des données recuperées apres post du formulaire
            ########## Actifs ###############
            $classesA = DB::connection($this->getDB($request))->table('classe')
                ->where('nature','=','actif')
@@ -1102,4 +1193,11 @@ class BilanController extends Controller
            $classesA,$classesB,$exercices,$infoEntreprises), 'bilans.pdf',\Maatwebsite\Excel\Excel::DOMPDF);
    }
 
+   public function index_import(Request $pays){
+       $dbs = $this->getDB($pays);
+       $input = $pays->all();
+        return view('pages.import')
+            ->with('dbs',$dbs)
+            ->with('input',$input);
+   }
 }

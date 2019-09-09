@@ -15,8 +15,8 @@ Route::get('/', function () {
 });
 Route::get('/bilan/{pays?}', 'BilanController@index');
 Route::post('/bilan', 'BilanController@bilan');
-//Route::get('/bilan', 'BilanController@index')->name('billan');
+Route::get('/index_import/{pays?}', 'BilanController@index_import')->name('index_import');
 Route::get('autocomplete/{pays?}', 'BilanController@listeEntreprises')->name('autocomplete');
 Route::post('/export', 'BilanController@export')->name('export');
-Route::post('/import', 'BilanController@import')->name('import');
+Route::post('/import/{pays?}', 'BilanController@import')->name('import');
 Route::post('/export_pdf', 'BilanController@export_pdf')->name('export_pdf');
