@@ -1,3 +1,6 @@
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
 <table class="table table-condensed table-responsive" style="font-size: 12px">
     @php
     $exercice1 = $input['exercice1'];
@@ -15,12 +18,11 @@
         <th></th>
         @for ($exo = $exercice1; $exo<=$exercice2; $exo++ )
         <th colspan="2">
-            @if (is_array($infoEntreprises))
             @foreach($infoEntreprises as $infoEntreprise)
-            {{ $infoEntreprise->Sigle  }}
+            {{ $infoEntreprise->Sigle }}
             @break;
             @endforeach
-            @endif
+
         </th>
         <th colspan="2" style="background-color: #F3F3F3; ">Pays</th>
         <th colspan="2" style="background-color: #BCDAC5">Indicateurs</th>

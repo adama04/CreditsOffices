@@ -11,13 +11,7 @@ use Maatwebsite\Excel\Concerns\FromView;
 use Illuminate\Contracts\View\View;
 
 class BilansExport  implements FromView  {
-    /**
-    * @return \Illuminate\Support\Collection
-    */
-   /* public function collection( Request $request)
-    {
-        return Classe::all();
-    }*/
+
     private $input,$collectclassesA,$collectclassesB,$collectclassesAGlobal,$collectclassesBGlobal,$collecttotalclassesA,$collecttotalclassesB
     ,$collecttotalclassesAGlobal,$collecttotalclassesBGlobal,$classesA,$classesB,$exercices,$infoEntreprises;
     public function view():View

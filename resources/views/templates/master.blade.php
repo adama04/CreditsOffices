@@ -217,7 +217,9 @@
                 <li><a href="#">Tarif des Privilèges et Nantissements</a></li>
             </ul>
         </li>
-
+        <li>
+        <a href="{{url('/index_import?pays='.$pays)}}">Chargement de la base</a>
+        </li>
     </div>   <!-- fin menu -->
 
 </div>
