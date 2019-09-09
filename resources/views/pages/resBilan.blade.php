@@ -11,7 +11,6 @@
     @php($exercice1 = $input['exercice1'])
     @php($exercice2 = $input['exercice2'])
 @endif
-
 <div class="container">
     <div class="card">
         <div class="card-body">
@@ -56,42 +55,42 @@
                 <div class="col-md-3">
                 </div>
                 <div class="col-md-3">
-            <form action="{{route('export')}}" method="POST" enctype="multipart/form-data">
-                @csrf
-                <div class="form-group row ">
-                    <div class="col-md-2">
-                        <button class="btn btn-success" type="submit" style="font-family: 'Times New Roman';font-size: large;"><span class='glyphicon glyphicon-export' ></span>Exporter Excel</button>
+                <form action="{{route('export')}}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="form-group row ">
+                        <div class="col-md-2">
+                            <button class="btn btn-success" type="submit" style="font-family: 'Times New Roman';font-size: large;"><span class='glyphicon glyphicon-export' ></span>Exporter Excel</button>
+                        </div>
+                    <div class="form-group row" hidden="hidden">
+                        <div class="col">
+                            <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="typeahead form-control" placeholder="Selectionner une entreprise" name="idEntreprise" value="{{ $input['idEntreprise'] }}">
+                        </div>
+                        <div class="col">
+                            <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="form-control" placeholder="Selectionner une entreprise" name="exercice1" value="{{ $input['exercice1'] }}">
+                        </div>
+                        <div class="col">
+                            <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="form-control" placeholder="Selectionner une entreprise" name="exercice2" value="{{ $input['exercice2'] }}">
+                        </div>
+                        <div class="col" style="font-family: 'Times New Roman, Times, serif';
+                                        font-size: 17px">
+                            <label for=""><input type="radio" name="naturep" value="paran" checked> Par année</label>
+                            <label for=""><input type="radio" name="naturep" value="variation"> Variation</label>
+                        </div>
                     </div>
-                <div class="form-group row" hidden="hidden">
-                    <div class="col">
-                        <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="typeahead form-control" placeholder="Selectionner une entreprise" name="idEntreprise" value="{{ $input['idEntreprise'] }}">
-                    </div>
-                    <div class="col">
-                        <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="form-control" placeholder="Selectionner une entreprise" name="exercice1" value="{{ $input['exercice1'] }}">
-                    </div>
-                    <div class="col">
-                        <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="form-control" placeholder="Selectionner une entreprise" name="exercice2" value="{{ $input['exercice2'] }}">
-                    </div>
-                    <div class="col" style="font-family: 'Times New Roman, Times, serif';
-                                    font-size: 17px">
-                        <label for=""><input type="radio" name="naturep" value="paran" checked> Par année</label>
-                        <label for=""><input type="radio" name="naturep" value="variation"> Variation</label>
-                    </div>
-                </div>
-                <div class="form-group row" hidden="hidden" >
-                    <div class="col" style="font-family: 'Times New Roman, Times, serif';font-size: 17px" >
-                        <label for=""><input type="radio" name="document" value="bilan" checked>&nbsp; Bilan</label>
-                        <label for=""><input type="radio" name="document" value="compres">&nbsp;Compte Resultat</label>
-                    </div>
-                    <div class="col"  style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
-                        <label for=""><input type="radio" name="localite" value="sensyyg2_senegalbd" checked>SENEGAL</label>
-                        <label for=""><input type="radio" name="localite" value="sensyyg2_umeoabd1">&nbsp; GROUPE</label>
-                        <label for=""> <input type="radio" name="localite" value="sensyyg2_umeoabd">&nbsp; UMEOA</label>
-                    </div>
+                    <div class="form-group row" hidden="hidden" >
+                        <div class="col" style="font-family: 'Times New Roman, Times, serif';font-size: 17px" >
+                            <label for=""><input type="radio" name="document" value="bilan" checked>&nbsp; Bilan</label>
+                            <label for=""><input type="radio" name="document" value="compres">&nbsp;Compte Resultat</label>
+                        </div>
+                        <div class="col"  style="font-family: 'Times New Roman, Times, serif';font-size: 17px">
+                            <label for=""><input type="radio" name="localite" value="sensyyg2_senegalbd" checked>SENEGAL</label>
+                            <label for=""><input type="radio" name="localite" value="sensyyg2_umeoabd1">&nbsp; GROUPE</label>
+                            <label for=""> <input type="radio" name="localite" value="sensyyg2_umeoabd">&nbsp; UMEOA</label>
+                        </div>
 
-                </div>
-        </div>
-            </form>
+                    </div>
+                    </div>
+                </form>
                 </div>
                     <div class="col-md-3">
             <form action="{{route('export_pdf')}}" method="POST" enctype="multipart/form-data">
@@ -198,18 +197,18 @@
                     <th >M. (CFA)</th>
                     <th >% / T.E</th>
                     <th style="background-color: #F3F3F3;">M. (CFA)</th>
-                    <th style="background-color: #F3F3F3">% / T.S</th>
+                    <th style="background-color: #F3F3F3">% / T.P</th>
                     @if($input['localite'] == 'uemoa')
                         <th>M. (CFA)</th>
                         <th>% / T.U</th>
                     @endif
                     <th style="background-color: #BCDAC5">P.D.M</th>
-                    <th style="background-color: #BCDAC5">R.P.E.S</th>
+                    <th style="background-color: #BCDAC5">R.P.E.P</th>
                     @if($input['localite'] == 'uemoa')
                         <th style="background-color: #BCDAC5">PDME % U</th>
                         <th style="background-color: #BCDAC5">R.P.E.U</th>
-                        <th style="background-color: #BCDAC5">PDMS % U</th>
-                        <th style="background-color: #BCDAC5">R.P.S.U</th>
+                        <th style="background-color: #BCDAC5">PDMP % U</th>
+                        <th style="background-color: #BCDAC5">R.P.P.U</th>
                     @endif
                     @if($input['naturep'] == 'paran')
                         <th style="background-color: #66CCFF">D.B.E</th>

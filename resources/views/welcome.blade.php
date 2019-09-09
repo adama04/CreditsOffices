@@ -5,5 +5,8 @@
 
 
 @section('content')
-    <p>This is my body content.</p>
+        <h3>
+            {{"Bureau D'information et De Crédit : AFRICA BIC"}}
+        </h3>
+
 @endsection

@@ -38,8 +38,9 @@ class BilanController extends Controller
     {
         $dbs = $this->getDB($pays);
         $lignebilans = DB::connection($dbs)->table('lignebilan')->groupBy('exercice')->get('exercice');
-        return view('pages.bilan')
-            ->with('dbs', $dbs)
+        return view('forms.rech_bilan')
+            //->with('dbs', $dbs)
+            ->with('pays', $pays['pays'])
             ->with('lignebilans', $lignebilans);
     }
     function listeEntreprises(Request $request)
@@ -56,29 +57,6 @@ class BilanController extends Controller
         }
         return response()->json($dataModified);
     }
-
-    function recupererinfo(Request $request)
-    {
-        $dbs = $this->getDB($request);
-        $exercice1 = $request->get('exercice1');
-        $exercice2 = $request->get('exercice2');
-        $taux = $exercice2 / $exercice1;
-        if ($taux < 1) {
-            $periode = $exercice2 - $exercice1;
-            $infoEntreprises = DB::connection($dbs)->table('entreprises')
-                ->join('ligneservices', 'entreprises.idEntreprise', '=', 'ligneservices.idEntreprise')
-                ->join('service', 'ligneservices.idService', '=', 'service.idService')
-                ->join('sousecteur', 'sousecteur.idSousecteur', '=', 'ligneservices.idSousecteur')
-                ->join('secteur', 'secteur.idSecteur', '=', 'sousecteur.idSecteur')
-                ->select('sousecteur.idsouSecteur', 'secteur.idSecteur', 'service.idService', 'entreprises.numRegistre',
-                    'entreprises.idEntreprise', 'entreprises.Adresse', 'entreprises.Sigle', 'entreprises.codePays', 'entreprises.codeRegion',
-                    'entreprises.Pays', 'entreprises.type', 'entreprises.dateCreation', 'entreprises.numEnregistre', 'sousecteur.nomsouSecteur', 'service.nomService',
-                    'secteur.nomSecteur')->get();
-        }
-            return view('pages.bilan')
-                ->with('periode',$periode)
-                ->with('infoEntreprises', $infoEntreprises);
-        }
 
     function bilan(Request $request){
         $collectclassesBGlobal=$collectclassesAGlobal =
@@ -106,6 +84,8 @@ class BilanController extends Controller
        ################### La verification doit etre dynamique #################
       #########################################################################
         $idE = explode('-',$request->get('idEntreprise'))[0];
+        $nomEntreprise = explode('-',$request->get('idEntreprise'))[1];
+
         $dbs = $this->getDB($request);
         $idsousecteur = DB::connection($dbs)->table('ligneservices')
             ->where('idEntreprise','=',$idE)
@@ -131,6 +111,16 @@ class BilanController extends Controller
             $natureA = 'charge';
             $natureB = 'produit';
         endif;
+        $infoEntreprises = DB::connection($dbs)->table('entreprises')
+            ->join('ligneservices', 'entreprises.idEntreprise', '=', 'ligneservices.idEntreprise')
+            ->join('service', 'ligneservices.idService', '=', 'service.idService')
+            ->join('sousecteur', 'sousecteur.idSousecteur', '=', 'ligneservices.idSousecteur')
+            ->join('secteur', 'secteur.idSecteur', '=', 'sousecteur.idSecteur')
+            ->select('sousecteur.idsouSecteur', 'secteur.idSecteur', 'service.idService', 'entreprises.numRegistre', 'entreprises.nomEntreprise',
+                'entreprises.idEntreprise', 'entreprises.Adresse', 'entreprises.Sigle', 'entreprises.codePays', 'entreprises.codeRegion',
+                'entreprises.Pays', 'entreprises.type', 'entreprises.dateCreation', 'entreprises.numEnregistre', 'sousecteur.nomsouSecteur', 'service.nomService',
+                'secteur.nomSecteur')->where('nomEntreprise','=',$nomEntreprise)
+            ->get();
 
             $classesA = DB::connection($this->getDB($request))->table('classe')
                 ->where('nature','=',$natureA)
@@ -326,17 +316,7 @@ class BilanController extends Controller
                 $collecttotalclassesAGlobal = $collecttotalclassesAGlobal->concat($totalclassesAGlobal);
                 $collecttotalclassesBGlobal = $collecttotalclassesBGlobal->concat($totalclassesBGlobal);
             endfor;
-        $nomEntreprise=explode("-",$input['idEntreprise'])[1];
-        $infoEntreprises = DB::connection($dbs)->table('entreprises')
-            ->join('ligneservices', 'entreprises.idEntreprise', '=', 'ligneservices.idEntreprise')
-            ->join('service', 'ligneservices.idService', '=', 'service.idService')
-            ->join('sousecteur', 'sousecteur.idSousecteur', '=', 'ligneservices.idSousecteur')
-            ->join('secteur', 'secteur.idSecteur', '=', 'sousecteur.idSecteur')
-            ->select('sousecteur.idsouSecteur', 'secteur.idSecteur', 'service.idService', 'entreprises.numRegistre', 'entreprises.nomEntreprise',
-                'entreprises.idEntreprise', 'entreprises.Adresse', 'entreprises.Sigle', 'entreprises.codePays', 'entreprises.codeRegion',
-                'entreprises.Pays', 'entreprises.type', 'entreprises.dateCreation', 'entreprises.numEnregistre', 'sousecteur.nomsouSecteur', 'service.nomService',
-                'secteur.nomSecteur')->where('entreprises.idEntreprise','=',$nomEntreprise)
-            ->get();
+
         if ($request->get('naturep') == 'paran'):
             $exercices = DB::connection($dbs)->table('lignebilan')
                 ->where('exercice','>=',$exercice01)
@@ -708,6 +688,7 @@ class BilanController extends Controller
                 'entreprises.Pays', 'entreprises.type', 'entreprises.dateCreation', 'entreprises.numEnregistre', 'sousecteur.nomsouSecteur', 'service.nomService',
                 'secteur.nomSecteur')->where('nomEntreprise','=',$nomEntreprise)
             ->get();
+        dd($infoEntreprises);
        // dd($infoEntreprises);
         $exercices = DB::connection($dbs)->table('lignebilan')
             ->where('exercice','>=',$exercice1)

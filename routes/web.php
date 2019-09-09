@@ -14,7 +14,9 @@ Route::get('/', function () {
     return view('welcome');
 });
 Route::get('/bilan/{pays?}', 'BilanController@index');
+Route::get('/bilandf/{pays?}', 'DiffBilanController@index');
 Route::post('/bilan', 'BilanController@bilan');
+Route::post('/bilandf', 'DiffBilanController@local');
 //Route::get('/bilan', 'BilanController@index')->name('billan');
 Route::get('autocomplete/{pays?}', 'BilanController@listeEntreprises')->name('autocomplete');
 Route::post('/export', 'BilanController@export')->name('export');

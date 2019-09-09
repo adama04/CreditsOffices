@@ -58,6 +58,6 @@ class BilansExport  implements FromView  {
         $this->classesA = $classesA;
         $this->classesB = $classesB;
         $this->exercices = $exercices;
-        $this->$infoEntreprises = $infoEntreprises;
+        $this->infoEntreprises = $infoEntreprises;
     }
 }
