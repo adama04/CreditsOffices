@@ -18,28 +18,28 @@
                                     font-size:large">
                 <label for="">Analyse Financ&egrave;re</label> :&nbsp;&nbsp;
             </div>
-            <div class="col-sm title_icon"><a href="{{url('/bilandf?pays=24')}}">
+            <div class="col-sm title_icon"><a href="{{ route('entreprise.df.bilan.create', ['pays' => 24]) }}">
                     <img src={{asset("images/Benin.jpg")}} title="Benin" alt="Benin" style=""/></a>
             </div>
-            <div class="col-sm title_icon"><a href="{{url('/bilandf?pays=34')}}">
+            <div class="col-sm title_icon"><a href="{{ route('entreprise.df.bilan.create', ['pays' => 34]) }}">
                     <img src={{asset("images/Burkina.jpg")}} title="Burkina" alt="Burkina" style=""/></a>
             </div>
-            <div class="col-sm title_icon"><a href="{{url('/bilandf?pays=48')}}">
+            <div class="col-sm title_icon"><a href="{{ route('entreprise.df.bilan.create', ['pays' => 48]) }}">
                     <img src={{asset("images/Cotedivoire.jpg")}} title="Cotedivoire" alt="Cote d'ivoire"  style=""/></a>
             </div>
             <div class="col-sm title_icon"><a href="{{url('/bilandf?pays=81')}}">
                     <img src={{asset("images/Guinneabissao.jpg")}} title="GuineeBissau" alt="Guinnee Bissau" style=""/></a>
             </div>
-            <div class="col-sm title_icon"><a href="{{url('/bilandf?pays=134')}}">
+            <div class="col-sm title_icon"><a href="{{ route('entreprise.df.bilan.create', ['pays' => 134]) }}">
                     <img src={{asset("images/Mali.jpg")}} title="Mali" alt="Mali" style=""/></a>
             </div>
-            <div class="col-sm title_icon"><a href="{{url('/bilandf?pays=154')}}">
+            <div class="col-sm title_icon"><a href="{{ route('entreprise.df.bilan.create', ['pays' => 154]) }}">
                     <img src={{asset("images/Niger.jpg")}} title="Niger" alt="Niger" style=""/></a>
             </div>
-            <div class="col-sm title_icon"><a href="{{url('/bilandf?pays=201')}}">
+            <div class="col-sm title_icon"><a href="{{ route('entreprise.df.bilan.create', ['pays' => 201]) }}">
                     <img src={{asset("images/Senegal.jpg")}} title="Senegal" alt="Senegal" style=""/></a>
             </div>
-            <div class="col-sm title_icon"><a href="{{url('/bilandf?pays=223')}}">
+            <div class="col-sm title_icon"><a href="{{ route('entreprise.df.bilan.create', ['pays' => 223]) }}">
                     <img src={{asset("images/Togo.jpg")}} title="Togo" alt="Togo" style=""/></a>
             </div>
         </div>
@@ -49,7 +49,7 @@
 
     <div class="card-body">
 
-        <form action="{{url('/bilandf?pays='.$pays)}}" method="post" target="index">
+        <form action="{{ route('entreprise.df.bilan.store', ['pays' => $pays]) }}" method="post" target="index">
             @csrf
             <div class="form-group row">
                 <div class="col">
@@ -86,7 +86,7 @@
                 <div class="col">
                     <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="typeahead form-control" placeholder="Selectionner l'entreprise de Référence" name="idEntrepriser" required>
                     <script type="text/javascript">
-                        var path = "{{ route('autocomplete', ['pays' => $pays]) }}";
+                        var path = "{{ route('autocompleteEntreprise', ['pays' => $pays]) }}";
                         $('input.typeahead').typeahead({
                             source:  function (query, process) {
                                 return $.get(path, { query: query }, function (data) {
@@ -99,7 +99,7 @@
                 <div class="col">
                     <input  style="font-family: 'Times New Roman';font-size: medium;" type="text" class="typeahead form-control" placeholder="Selectionner une Entreprise" name="idEntreprise" required>
                     <script type="text/javascript">
-                        var path = "{{ route('autocomplete', ['pays' => $pays]) }}";
+                        var path = "{{ route('autocompleteEntreprise', ['pays' => $pays]) }}";
                         $('input.typeahead').typeahead({
                             source:  function (query, process) {
                                 return $.get(path, { query: query }, function (data) {

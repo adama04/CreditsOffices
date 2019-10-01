@@ -1,12 +1,9 @@
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.1.3/css/bootstrap.min.css" />
+@include('templates._assets')
 @if($input['exercice1'] > $input['exercice2'])
     @php
         $exercice1 = $input['exercice2'];
         $exercice2 = $input['exercice1'];
-
-@endphp
+    @endphp
 @else
     @php($exercice1 = $input['exercice1'])
     @php($exercice2 = $input['exercice2'])
@@ -15,16 +12,16 @@
     <div class="card">
         <div class="card-body">
             @foreach($infoEntreprises as $infoEntreprise )
-            <div class="form-row" style="font-family: 'Times New Roman'; color: #0355BF; font-size:medium">
-                <div class="col-md-6">
-                    Numero Registre :
-                    <span>{{$infoEntreprise->numRegistre}}</span>
+                <div class="form-row" style="font-family: 'Times New Roman'; color: #0355BF; font-size:medium">
+                    <div class="col-md-6">
+                        Numero Registre :
+                        <span>{{$infoEntreprise->numRegistre}}</span>
+                    </div>
+                    <div class="col-md-6">
+                        Secteur :
+                        <span>{{$infoEntreprise->nomSecteur}}</span>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    Secteur :
-                    <span>{{$infoEntreprise->nomSecteur}}</span>
-                </div>
-            </div>
 
                 <div class="form-row" style="font-family: 'Times New Roman'; color: #0355BF; font-size: medium">
                     <div class="col-md-6">
@@ -40,8 +37,8 @@
                         </span>
                     </div>
                 </div>
-                    <div class="form-row" style="font-family: 'Times New Roman'; color: #0355AF; font-size: medium">
-                        <div class="col-md-6">
+                <div class="form-row" style="font-family: 'Times New Roman'; color: #0355AF; font-size: medium">
+                    <div class="col-md-6">
                         Adresse :
                         <span>{{$infoEntreprise->Adresse}}</span>
                     </div>
@@ -51,8 +48,7 @@
                     </div>
                 </div>
             @endforeach
-
-</div>
+        </div>
     <table class="table table-condensed" style="font-size: 12px">
         <thead  >
         @if($input['naturep'] == 'variation')
