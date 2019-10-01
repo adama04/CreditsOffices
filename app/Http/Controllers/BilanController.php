@@ -21,41 +21,13 @@ use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 class BilanController extends Controller
 {
 
-    function getDB(Request $request)
-    {
-        if ($request['pays'])
-            $idPays = $request['pays'];
-        else
-            $idPays = 201;
-
-        $db = DB::table('pays')->where('idPays', $idPays)->get('bdPays');
-        foreach ($db as $d) {
-            $db = $d->bdPays;
-        }
-        return $db;
-    }
-
     function index(Request $pays)
     {
-        $dbs = $this->getDB($pays);
+        $dbs = getDB($pays);
         $lignebilans = DB::connection($dbs)->table('lignebilan')->groupBy('exercice')->get('exercice');
         return view('forms.rech_bilan')
-            //->with('dbs', $dbs)
             ->with('pays', $pays['pays'])
             ->with('lignebilans', $lignebilans);
-    }
-    function listeEntreprises(Request $request)
-    {
-        $dbs = $this->getDB($request);
-        $entreprises = DB::connection($dbs)->table('entreprises')
-            ->where('nomEntreprise', 'LIKE', "%{$request->input('query')}%")
-            ->orWhere('Sigle', 'LIKE', "%{strtoupper($request->input('query'))}%")
-            ->get(['nomEntreprise', 'idEntreprise']);
-        $dataModified = array();
-        foreach ($entreprises as $entreprise) {
-            $dataModified[] = $entreprise->idEntreprise . '-' . $entreprise->nomEntreprise;
-        }
-        return response()->json($dataModified);
     }
 
     function bilan(Request $request){
@@ -86,13 +58,11 @@ class BilanController extends Controller
         $idE = explode('-',$request->get('idEntreprise'))[0];
         $nomEntreprise = explode('-',$request->get('idEntreprise'))[1];
 
-        $dbs = $this->getDB($request);
+        $dbs = getDB($request);
         $idsousecteur = DB::connection($dbs)->table('ligneservices')
             ->where('idEntreprise','=',$idE)
-            ->get('idsouSecteur');
-        foreach ($idsousecteur as $item):
-            $idsousecteur = $item->idsouSecteur;
-        endforeach;
+            ->first('idsouSecteur');
+
         if ($request->get('naturep') == 'paran'):
             if ($exercice1 > 2000):
                 $exercice1 -= 1;
@@ -122,12 +92,12 @@ class BilanController extends Controller
                 'secteur.nomSecteur')->where('nomEntreprise','=',$nomEntreprise)
             ->get();
 
-            $classesA = DB::connection($this->getDB($request))->table('classe')
+            $classesA = DB::connection($dbs)->table('classe')
                 ->where('nature','=',$natureA)
                 ->orderBy('classe.idClasse','asc')
                 ->get('nomClasse');
             ########## Passifs ###############
-            $classesB = DB::connection($this->getDB($request))->table('classe')
+            $classesB = DB::connection($dbs)->table('classe')
                 ->where('nature','=',$natureB)
                 ->orderBy('classe.idClasse','asc')
                 ->get('nomClasse');
@@ -155,7 +125,7 @@ class BilanController extends Controller
                         $collectclassesAGlobal=$collectclassesAGlobal->concat($SommeAGlobal);
 
                         // Global de chaque classe (somme rubrique) pour l'entreprise
-                        $SommeA=DB::connection($this->getDB($request))->table('classe')
+                        $SommeA=DB::connection($dbs)->table('classe')
                             ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
                             ->join('sousclasse', 'classe.idClasse', '=', 'sousclasse.idClasse')
                             ->join('rubrique', 'sousclasse.idSousclasse', '=', 'rubrique.idSousclasse')
@@ -204,7 +174,7 @@ class BilanController extends Controller
                     $collectclassesBGlobal=$collectclassesBGlobal->concat($SommeBGlobal);
 
                     // Global de chaque classe (somme rubrique) pour l'entreprise
-                    $SommeB=DB::connection($this->getDB($request))->table('classe')
+                    $SommeB=DB::connection($dbs)->table('classe')
                         ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
                         ->join('sousclasse', 'classe.idClasse', '=', 'sousclasse.idClasse')
                         ->join('rubrique', 'sousclasse.idSousclasse', '=', 'rubrique.idSousclasse')
@@ -251,10 +221,7 @@ class BilanController extends Controller
                             ->join('sousclasse' , 'classe.idClasse' , '=' , 'sousclasse.idClasse')
                             ->join('rubrique' , 'sousclasse.idSousclasse' , '=' , 'rubrique.idSousclasse')
                             ->join('lignebilan' , 'rubrique.idRubrique' , '=' , 'lignebilan.idRubrique')
-                            ->join('entreprises','lignebilan.idEntreprise','=','entreprises.idEntreprise')
-                            ->join('ligneservices','entreprises.idEntreprise','=','ligneservices.idEntreprise')
                             ->where('exercice','=',$YEARS[$i])
-                            ->where('idsousecteur','=',$idsousecteur)
                             ->where('nature','=',$natureA)
                             ->groupBy('exercice')
                             ->get();
@@ -393,7 +360,7 @@ class BilanController extends Controller
         $idE = explode('-',$request->get('idEntreprise'))[0];
         $nomEntreprise = explode("-",$request->get('idEntreprise'))[1];
        // dd($nomEntreprise,$exercice1,$idE);
-        $dbs = $this->getDB($request);
+        $dbs = getDB($request);
         $idsousecteur = DB::connection($dbs)->table('ligneservices')
             ->where('idEntreprise','=',$idE)
             ->get('idsouSecteur');
@@ -405,13 +372,13 @@ class BilanController extends Controller
 
             // Selectionner les classe a afficher en fonction des données recuperées apres post ddu formulaire
             ########## Actifs ###############
-            $classesA = DB::connection($this->getDB($request))->table('classe')
+            $classesA = DB::connection($dbs)->table('classe')
                 ->where('nature','=','actif')
                 ->orderBy('classe.idClasse','asc')
                 ->get('nomClasse');
         //dd($classesA->nomClasse);
             ########## Passifs ###############
-            $classesB = DB::connection($this->getDB($request))->table('classe')
+            $classesB = DB::connection($dbs)->table('classe')
                 ->where('nature','=','passif')
                 ->orderBy('classe.idClasse','asc')
                 ->get('nomClasse');
@@ -437,7 +404,7 @@ class BilanController extends Controller
                     $collectclassesAGlobal =$collectclassesAGlobal->concat($SommeAGlobal);
 
                     // Global de chaque classe (somme rubrique) pour l'entreprise
-                    $SommeA = DB::connection($this->getDB($request))->table('classe')
+                    $SommeA = DB::connection($dbs)->table('classe')
                         ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
                         ->join('sousclasse','classe.idClasse','=','sousclasse.idClasse')
                         ->join('rubrique','sousclasse.idSousclasse','=','rubrique.idSousclasse')
@@ -472,7 +439,7 @@ class BilanController extends Controller
                     $collectclassesBGlobal =$collectclassesBGlobal->concat($SommeBGlobal);
 
                     // Global de chaque classe (somme rubrique) pour l'entreprise
-                    $SommeB = DB::connection($this->getDB($request))->table('classe')
+                    $SommeB = DB::connection($dbs)->table('classe')
                         ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
                         ->join('sousclasse','classe.idClasse','=','sousclasse.idClasse')
                         ->join('rubrique','sousclasse.idSousclasse','=','rubrique.idSousclasse')
@@ -543,12 +510,12 @@ class BilanController extends Controller
         if ($request->get('document')=='compres'):
             // Selectionner les classe a afficher en fonction des données recuperées apres post ddu formulaire
             ########## Actifs ###############
-            $classesA = DB::connection($this->getDB($request))->table('classe')
+            $classesA = DB::connection($dbs)->table('classe')
                 ->where('nature','=','charge')
                 ->orderBy('classe.idClasse','asc')
                 ->get('nomClasse');
             ########## Passifs ###############
-            $classesB = DB::connection($this->getDB($request))->table('classe')
+            $classesB = DB::connection($dbs)->table('classe')
                 ->where('nature','=','produit')
                 ->orderBy('classe.idClasse','asc')
                 ->get('nomClasse');
@@ -574,7 +541,7 @@ class BilanController extends Controller
                     $collectclassesAGlobal =$collectclassesAGlobal->concat($SommeAGlobal);
 
                     // Global de chaque classe (somme rubrique) pour l'entreprise
-                    $SommeA = DB::connection($this->getDB($request))->table('classe')
+                    $SommeA = DB::connection($dbs)->table('classe')
                         ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
                         ->join('sousclasse','classe.idClasse','=','sousclasse.idClasse')
                         ->join('rubrique','sousclasse.idSousclasse','=','rubrique.idSousclasse')
@@ -609,7 +576,7 @@ class BilanController extends Controller
                     $collectclassesBGlobal =$collectclassesBGlobal->concat($SommeBGlobal);
 
                     // Global de chaque classe (somme rubrique) pour l'entreprise
-                    $SommeB = DB::connection($this->getDB($request))->table('classe')
+                    $SommeB = DB::connection($dbs)->table('classe')
                         ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
                         ->join('sousclasse','classe.idClasse','=','sousclasse.idClasse')
                         ->join('rubrique','sousclasse.idSousclasse','=','rubrique.idSousclasse')
@@ -701,7 +668,7 @@ class BilanController extends Controller
     }
     public function import(Request $request)
     {
-        $dbs=$this->getDB($request);
+        $dbs=getDB($request);
         $this->validate($request, [
             'select_file' => 'required|mimes:xls,xlsx'
         ]);
@@ -830,7 +797,7 @@ class BilanController extends Controller
        $idE = explode('-',$request->get('idEntreprise'))[0];
        $nomEntreprise = explode("-",$request->get('idEntreprise'))[1];
        // dd($nomEntreprise,$exercice1,$idE);
-       $dbs = $this->getDB($request);
+       $dbs = getDB($request);
        $idsousecteur = DB::connection($dbs)->table('ligneservices')
            ->where('idEntreprise','=',$idE)
            ->get('idsouSecteur');
@@ -842,13 +809,13 @@ class BilanController extends Controller
 
            // Selectionner les classe a afficher en fonction des données recuperées apres post du formulaire
            ########## Actifs ###############
-           $classesA = DB::connection($this->getDB($request))->table('classe')
+           $classesA = DB::connection($dbs)->table('classe')
                ->where('nature','=','actif')
                ->orderBy('classe.idClasse','asc')
                ->get('nomClasse');
            //dd($classesA->nomClasse);
            ########## Passifs ###############
-           $classesB = DB::connection($this->getDB($request))->table('classe')
+           $classesB = DB::connection($dbs)->table('classe')
                ->where('nature','=','passif')
                ->orderBy('classe.idClasse','asc')
                ->get('nomClasse');
@@ -874,7 +841,7 @@ class BilanController extends Controller
                    $collectclassesAGlobal =$collectclassesAGlobal->concat($SommeAGlobal);
 
                    // Global de chaque classe (somme rubrique) pour l'entreprise
-                   $SommeA = DB::connection($this->getDB($request))->table('classe')
+                   $SommeA = DB::connection($dbs)->table('classe')
                        ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
                        ->join('sousclasse','classe.idClasse','=','sousclasse.idClasse')
                        ->join('rubrique','sousclasse.idSousclasse','=','rubrique.idSousclasse')
@@ -909,7 +876,7 @@ class BilanController extends Controller
                    $collectclassesBGlobal =$collectclassesBGlobal->concat($SommeBGlobal);
 
                    // Global de chaque classe (somme rubrique) pour l'entreprise
-                   $SommeB = DB::connection($this->getDB($request))->table('classe')
+                   $SommeB = DB::connection($dbs)->table('classe')
                        ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
                        ->join('sousclasse','classe.idClasse','=','sousclasse.idClasse')
                        ->join('rubrique','sousclasse.idSousclasse','=','rubrique.idSousclasse')
@@ -980,12 +947,12 @@ class BilanController extends Controller
        if ($request->get('document')=='compres'):
            // Selectionner les classe a afficher en fonction des données recuperées apres post ddu formulaire
            ########## Actifs ###############
-           $classesA = DB::connection($this->getDB($request))->table('classe')
+           $classesA = DB::connection($dbs)->table('classe')
                ->where('nature','=','charge')
                ->orderBy('classe.idClasse','asc')
                ->get('nomClasse');
            ########## Passifs ###############
-           $classesB = DB::connection($this->getDB($request))->table('classe')
+           $classesB = DB::connection($dbs)->table('classe')
                ->where('nature','=','produit')
                ->orderBy('classe.idClasse','asc')
                ->get('nomClasse');
@@ -1011,7 +978,7 @@ class BilanController extends Controller
                    $collectclassesAGlobal =$collectclassesAGlobal->concat($SommeAGlobal);
 
                    // Global de chaque classe (somme rubrique) pour l'entreprise
-                   $SommeA = DB::connection($this->getDB($request))->table('classe')
+                   $SommeA = DB::connection($dbs)->table('classe')
                        ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
                        ->join('sousclasse','classe.idClasse','=','sousclasse.idClasse')
                        ->join('rubrique','sousclasse.idSousclasse','=','rubrique.idSousclasse')
@@ -1046,7 +1013,7 @@ class BilanController extends Controller
                    $collectclassesBGlobal =$collectclassesBGlobal->concat($SommeBGlobal);
 
                    // Global de chaque classe (somme rubrique) pour l'entreprise
-                   $SommeB = DB::connection($this->getDB($request))->table('classe')
+                   $SommeB = DB::connection($dbs)->table('classe')
                        ->selectRaw('nomClasse,nature,exercice,SUM(lignebilan.brut) as total')
                        ->join('sousclasse','classe.idClasse','=','sousclasse.idClasse')
                        ->join('rubrique','sousclasse.idSousclasse','=','rubrique.idSousclasse')
@@ -1137,7 +1104,7 @@ class BilanController extends Controller
    }
 
    public function index_import(Request $pays){
-       $dbs = $this->getDB($pays);
+       $dbs = getDB($pays);
        $input = $pays->all();
         return view('pages.import')
             ->with('dbs',$dbs)
